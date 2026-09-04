@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BharatVirasat- AI Heritage Explorer</title>
+  <link rel="stylesheet" href="styles-premium.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22>🏛️</text></svg>">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <div class="logo">
+      <span>🏛️</span>
+      <div class="logo-text">
+        <div class="brand">BHARAT VIRASAT</div>
+        <div class="tagline">PREMIUM</div>
+      </div>
+    </div>
+  </div>
+  <div class="header-controls">
+    <div id="google_translate_element" aria-label="Choose language"></div>
+    <button id="ai-chat-btn">💬 AI Chat</button>
+    <button id="saved-btn">❤️ Saved</button>
+    <button class="dark-toggle">🌙</button>
+  </div>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <p style="font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 1rem;">🏆 PREMIUM HERITAGE EXPERIENCE</p>
+    <h1>
+      Discover India's <span class="highlight">Living Legends</span><br>
+      Personalized For You
+    </h1>
+    <p>Get AI-powered recommendations based on your interests, time, and exploration style. Unlock the soul of India's 42+ UNESCO heritage sites.</p>
+    <div class="hero-buttons">
+      <button class="btn btn-primary" id="start-journey-btn">✨ Start Personalized Journey</button>
+      <button class="btn btn-secondary" id="watch-demo-btn">🎬 Watch Demo</button>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONALIZATION ENGINE -->
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+  <section class="personalization">
+    <div class="section-title">
+      <h2>🎯 Tailor Your Experience</h2>
+      <p>Tell us what you love, and we'll find the perfect heritage sites for your visit</p>
+    </div>
+
+    <div class="filters-container">
+      <div class="filter-group">
+        <label>⏱️ How Much Time Do You Have?</label>
+        <select id="exploration-time">
+          <option value="">Select Duration</option>
+          <option value="1">1 Hour Quick Visit</option>
+          <option value="3">3 Hours - Half Day</option>
+          <option value="6">6 Hours - Full Day</option>
+          <option value="12">12+ Hours - Deep Dive</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>📍 Which Region Interests You?</label>
+        <select>
+          <option>All India</option>
+          <option>North India</option>
+          <option>South India</option>
+          <option>East India</option>
+          <option>West India</option>
+          <option>Central India</option>
+          <option>Northeast India</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>🎭 What Fascinates You Most?</label>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;">
+            <input type="checkbox" class="interest-filter" value="ancient">
+            Ancient History
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;">
+            <input type="checkbox" class="interest-filter" value="architecture">
+            Architecture & Art
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;">
+            <input type="checkbox" class="interest-filter" value="spiritual">
+            Spiritual Sites
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;">
+            <input type="checkbox" class="interest-filter" value="royalty">
+            Royal Palaces
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats"></div>
+  </section>
+
+  <!-- SEARCH & FILTERS -->
+  <div style="margin: 3rem 0;">
+    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap;">
+      <input type="text" placeholder="🔍 Search by site name, state, dynasty..." style="flex: 1; min-width: 200px; padding: 0.8rem; border: 2px solid var(--primary); border-radius: 8px; font-size: 1rem;">
+    </div>
+
+    <div style="margin-bottom: 2rem;">
+      <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">🏛️ Filter by Category</h3>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <button class="btn btn-primary category-filter active" style="background: var(--primary); color: var(--text-dark);">🏛️ All Heritage Sites</button>
+        <button class="btn btn-secondary category-filter">🏰 Monuments & Palaces</button>
+        <button class="btn btn-secondary category-filter">🛕 Temples & Sacred</button>
+        <button class="btn btn-secondary category-filter">⛰️ Caves & Rock-Cut</button>
+        <button class="btn btn-secondary category-filter">🛡️ Forts & Citadels</button>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">🗺️ Explore by Region</h3>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <button class="btn btn-primary zone-filter active" style="background: var(--primary); color: var(--text-dark);">All India</button>
+        <button class="btn btn-secondary zone-filter">North India</button>
+        <button class="btn btn-secondary zone-filter">South India</button>
+        <button class="btn btn-secondary zone-filter">East India</button>
+        <button class="btn btn-secondary zone-filter">West India</button>
+        <button class="btn btn-secondary zone-filter">Central India</button>
+        <button class="btn btn-secondary zone-filter">Northeast India</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS GRID -->
+  <main>
+    <section style="margin-bottom: 4rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Heritage Marvels Curated For You</h2>
+        <p style="color: #666;">Discover authentic stories, expert recommendations, and exclusive experiences</p>
+      </div>
+      <div class="sites-container">
+        <!-- Cards will be populated by JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <!-- STATE HERITAGE GUIDE -->
+  <section class="state-guide" id="state-heritage-guide">
+    <div class="section-title">
+      <h2>🧭 Know Your State Heritage Sites</h2>
+      <p>Explore UNESCO and ASI places, tickets, nearby stops, routes, and realistic time plans.</p>
+    </div>
+    <label for="state-guide-select">Choose a state or union territory</label>
+    <select id="state-guide-select" aria-label="Choose a state heritage guide"></select>
+    <div id="state-guide-results"></div>
+  </section>
+
+  <!-- HERITAGE TEST SLIDE -->
+  <section class="heritage-test-slide" id="heritage-test">
+    <div class="test-slide-copy">
+      <p class="eyebrow">INTERACTIVE HERITAGE TEST</p>
+      <h2>Can you identify this Indian marvel?</h2>
+      <p id="test-question">Which monument's stone chariot appears on the reverse of the Indian ₹50 note?</p>
+    </div>
+    <div class="test-options" id="test-options">
+      <button type="button" data-answer="wrong">Konark Sun Temple</button>
+      <button type="button" data-answer="correct">Hampi's Vittala Temple</button>
+      <button type="button" data-answer="wrong">Mahabalipuram Shore Temple</button>
+      <button type="button" data-answer="wrong">Brihadisvara Temple</button>
+    </div>
+    <p class="test-result" id="test-result" aria-live="polite"></p>
+    <button type="button" class="btn btn-primary" id="next-test-btn">Next question</button>
+  </section>
+
+  <!-- CREATOR NOTE -->
+  <section class="creator-note" id="about-creators">
+    <p class="eyebrow">ABOUT THE CREATORS</p>
+    <h2>Team CODE:BLACK</h2>
+    <p class="creator-intro">BharatVirasat is a digital heritage project created to make India's monuments, living traditions, and cultural stories easier to explore.</p>
+    <div class="creator-grid">
+      <article><strong>Farhan Tamboli</strong><span>Script leader: architecture, interactive logic, and portal engineering.</span></article>
+      <article><strong>Samrat Jha</strong><span>Prompt typer: AI prompt design, knowledge curation, and cultural synthesis.</span></article>
+      <article><strong>Simran Jha</strong><span>UI looker and confirmer: visual review, UX quality, and design validation.</span></article>
+      <article><strong>Research and Development</strong><span>Harsh Satav, Ilisha Jain, and Dhhairya Khumbhar: research, data curation, and feature validation.</span></article>
+    </div>
+    <a class="creator-link" href="https://code-blac.netlify.app/" target="_blank" rel="noopener">Visit the original CODE:BLACK heritage project</a>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #e74c3c 100%); color: var(--text-dark); padding: 3rem 2rem; border-radius: 15px; text-align: center; margin: 4rem 0;">
+    <h2 style="font-size: 2rem; margin-bottom: 1rem;">Ready for Your Heritage Adventure?</h2>
+    <p style="margin-bottom: 2rem; font-size: 1.1rem;">Get personalized recommendations, book experiences, and connect with fellow heritage enthusiasts.</p>
+    <button class="btn journey-cta" id="start-journey-now-btn" type="button">Start Your Journey Now →</button>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>🏛️ BharatVirasat Premium - Celebrating Indian Heritage Through Technology 🇮🇳</p>
+  <p>Powered by Google Gemini AI | Multilingual Support | Smart Recommendations</p>
+  <p style="font-size: 0.9rem; opacity: 0.7;">Made with ❤️ during Smart India Hackathon</p>
+</footer>
+
+<!-- DETAIL MODAL -->
+<div class="modal" id="detail-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Heritage Site Details</h2>
+      <button class="modal-close">&times;</button>
+    </div>
+    <p>Loading...</p>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div id="gemini-drawer-backdrop" class="gemini-backdrop"></div>
+<aside id="gemini-chat-drawer" class="gemini-drawer" aria-label="Gemini heritage guide">
+  <div class="gemini-drawer-header">
+    <div><strong>Gemini Heritage Guide</strong><small>Ask about India's heritage</small></div>
+    <button id="gemini-close-btn" type="button" aria-label="Close chat">&times;</button>
+  </div>
+  <div id="gemini-messages" class="gemini-messages"></div>
+  <div class="gemini-input-row">
+    <input id="gemini-chat-input" type="text" placeholder="Ask about a heritage site..." autocomplete="off">
+    <button id="gemini-mic-btn" type="button" aria-label="Use voice input">🎙️</button>
+    <button id="gemini-send-btn" type="button">Send</button>
+  </div>
+</aside>
+
+<!-- SCRIPTS -->
+<script src="data.js"></script>
+<script src="app-premium.js"></script>
+<script src="gemini-bot.js"></script>
+<script src="state-guides.js"></script>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+document.getElementById('ai-chat-btn').addEventListener('click', openGeminiDrawer);
+document.getElementById('saved-btn').addEventListener('click', () => {
+  document.querySelector('.sites-container')?.scrollIntoView({ behavior: 'smooth' });
+  document.querySelector('.sites-container')?.classList.add('saved-focus');
+});
+document.getElementById('start-journey-btn').addEventListener('click', () => {
+  document.querySelector('.personalization')?.scrollIntoView({ behavior: 'smooth' });
+});
+document.getElementById('watch-demo-btn').addEventListener('click', openGeminiDrawer);
+document.getElementById('start-journey-now-btn').addEventListener('click', () => {
+  const cards = document.querySelector('.sites-container');
+  cards?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const sites = window.bharat?.heritageData || window.heritageData || [];
+  if (!sites.length) return;
+  const site = sites[Math.floor(Math.random() * sites.length)];
+  setTimeout(() => {
+    window.bharat?.showDetailModal(site);
+  }, 500);
+});
+
+const testQuestions = [
+  { question: "Which monument's stone chariot appears on the reverse of the Indian ₹50 note?", options: ["Konark Sun Temple", "Hampi's Vittala Temple", "Mahabalipuram Shore Temple", "Brihadisvara Temple"], answer: 1 },
+  { question: 'Which cave complex contains the monolithic Kailasa Temple?', options: ['Ajanta Caves', 'Elephanta Caves', 'Ellora Caves', 'Kanheri Caves'], answer: 2 },
+  { question: 'Which site is famous for its seven-level underground stepwell?', options: ['Rani ki Vav', 'Sanchi', 'Dholavira', 'Nalanda'], answer: 0 }
+];
+let testIndex = 0;
+function renderTestQuestion() {
+  const test = testQuestions[testIndex];
+  document.getElementById('test-question').textContent = test.question;
+  document.querySelectorAll('#test-options button').forEach((button, index) => {
+    button.textContent = test.options[index];
+    button.dataset.answer = index === test.answer ? 'correct' : 'wrong';
+    button.disabled = false;
+  });
+  document.getElementById('test-result').textContent = '';
+}
+document.querySelectorAll('#test-options button').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('#test-options button').forEach(option => { option.disabled = true; });
+    document.getElementById('test-result').textContent = button.dataset.answer === 'correct' ? 'Correct. You have a heritage eye.' : 'Not this time. Explore the cards above and try again.';
+  });
+});
+document.getElementById('next-test-btn').addEventListener('click', () => {
+  testIndex = (testIndex + 1) % testQuestions.length;
+  renderTestQuestion();
+});
+
+// Close modal on outside click
+document.getElementById('detail-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>
