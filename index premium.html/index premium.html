@@ -29,8 +29,16 @@
   </div>
 </header>
 
+<nav class="chapter-nav" aria-label="Explore BharatVirasat">
+  <a href="#journey" class="active">Journey</a>
+  <a href="#discover">Discover</a>
+  <a href="#state-heritage-guide">State guides</a>
+  <a href="#heritage-test">Quiz</a>
+  <a href="#about-creators">About</a>
+</nav>
+
 <!-- HERO SECTION -->
-<section class="hero">
+<section class="hero" id="journey">
   <div class="hero-content">
     <p style="font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 1rem;">🏆 PREMIUM HERITAGE EXPERIENCE</p>
     <h1>
@@ -46,8 +54,8 @@
 </section>
 
 <!-- PERSONALIZATION ENGINE -->
-<div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
-  <section class="personalization">
+<div class="content-shell">
+  <section class="personalization reveal">
     <div class="section-title">
       <h2>🎯 Tailor Your Experience</h2>
       <p>Tell us what you love, and we'll find the perfect heritage sites for your visit</p>
@@ -106,7 +114,7 @@
   </section>
 
   <!-- SEARCH & FILTERS -->
-  <div style="margin: 3rem 0;">
+  <div class="discover-tools reveal" id="discover">
     <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap;">
       <input type="text" placeholder="🔍 Search by site name, state, dynasty..." style="flex: 1; min-width: 200px; padding: 0.8rem; border: 2px solid var(--primary); border-radius: 8px; font-size: 1rem;">
     </div>
@@ -138,7 +146,7 @@
 
   <!-- CARDS GRID -->
   <main>
-    <section style="margin-bottom: 4rem;">
+    <section class="marvels-section reveal">
       <div style="text-align: center; margin-bottom: 2rem;">
         <h2 style="font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Heritage Marvels Curated For You</h2>
         <p style="color: #666;">Discover authentic stories, expert recommendations, and exclusive experiences</p>
@@ -150,7 +158,7 @@
   </main>
 
   <!-- STATE HERITAGE GUIDE -->
-  <section class="state-guide" id="state-heritage-guide">
+  <section class="state-guide reveal" id="state-heritage-guide">
     <div class="section-title">
       <h2>🧭 Know Your State Heritage Sites</h2>
       <p>Explore UNESCO and ASI places, tickets, nearby stops, routes, and realistic time plans.</p>
@@ -161,7 +169,7 @@
   </section>
 
   <!-- HERITAGE TEST SLIDE -->
-  <section class="heritage-test-slide" id="heritage-test">
+  <section class="heritage-test-slide reveal" id="heritage-test">
     <div class="test-slide-copy">
       <p class="eyebrow">INTERACTIVE HERITAGE TEST</p>
       <h2>Can you identify this Indian marvel?</h2>
@@ -178,7 +186,7 @@
   </section>
 
   <!-- CREATOR NOTE -->
-  <section class="creator-note" id="about-creators">
+  <section class="creator-note reveal" id="about-creators">
     <p class="eyebrow">ABOUT THE CREATORS</p>
     <h2>Team CODE:BLACK</h2>
     <p class="creator-intro">BharatVirasat is a digital heritage project created to make India's monuments, living traditions, and cultural stories easier to explore.</p>
@@ -192,7 +200,7 @@
   </section>
 
   <!-- CTA SECTION -->
-  <section style="background: linear-gradient(135deg, var(--primary) 0%, #e74c3c 100%); color: var(--text-dark); padding: 3rem 2rem; border-radius: 15px; text-align: center; margin: 4rem 0;">
+  <section class="journey-cta-section reveal">
     <h2 style="font-size: 2rem; margin-bottom: 1rem;">Ready for Your Heritage Adventure?</h2>
     <p style="margin-bottom: 2rem; font-size: 1.1rem;">Get personalized recommendations, book experiences, and connect with fellow heritage enthusiasts.</p>
     <button class="btn journey-cta" id="start-journey-now-btn" type="button">Start Your Journey Now →</button>
@@ -308,6 +316,33 @@ document.getElementById('next-test-btn').addEventListener('click', () => {
   testIndex = (testIndex + 1) % testQuestions.length;
   renderTestQuestion();
 });
+
+// Reveal content as each chapter enters the viewport.
+const revealItems = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+  revealItems.forEach(item => revealObserver.observe(item));
+} else {
+  revealItems.forEach(item => item.classList.add('is-visible'));
+}
+
+const chapterLinks = document.querySelectorAll('.chapter-nav a');
+const chapterSections = document.querySelectorAll('#journey, #discover, #state-heritage-guide, #heritage-test, #about-creators');
+if ('IntersectionObserver' in window) {
+  const chapterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      chapterLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
+    });
+  }, { rootMargin: '-25% 0px -65% 0px' });
+  chapterSections.forEach(section => chapterObserver.observe(section));
+}
 
 // Close modal on outside click
 document.getElementById('detail-modal').addEventListener('click', (e) => {
