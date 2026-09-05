@@ -231,10 +231,39 @@ body.dark-mode {
 .state-empty { padding: 1rem; background: white; border-radius: 8px; line-height: 1.5; }
 .state-map-btn { margin-top: 0.5rem; }
 #google_translate_element {
-  flex: 1 1 190px;
   min-width: 170px;
   max-width: 230px;
   overflow: visible;
+}
+
+.language-tools {
+  display: grid;
+  gap: 0.25rem;
+  flex: 1 1 190px;
+  min-width: 190px;
+}
+
+.language-tools label {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+#language-search {
+  width: 100%;
+  min-height: 32px;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid rgba(181, 107, 53, 0.7);
+  border-radius: 6px;
+  background: #fffaf2;
+  color: #183d3a;
+  font: inherit;
+}
+
+#language-search:focus {
+  outline: 2px solid #d29a58;
+  outline-offset: 2px;
 }
 
 #google_translate_element select,

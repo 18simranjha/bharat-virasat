@@ -22,7 +22,11 @@
     </div>
   </div>
   <div class="header-controls">
-    <div id="google_translate_element" aria-label="Choose language"></div>
+    <div class="language-tools">
+      <label for="language-search">Language</label>
+      <input id="language-search" type="search" placeholder="Search language..." autocomplete="off">
+      <div id="google_translate_element" aria-label="Choose language"></div>
+    </div>
     <button id="ai-chat-btn">💬 AI Chat</button>
     <button id="saved-btn">❤️ Saved</button>
     <button class="dark-toggle">🌙</button>
@@ -294,6 +298,48 @@ function googleTranslateElementInit() {
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script>
+const languageSearch = document.getElementById('language-search');
+const languageHost = document.getElementById('google_translate_element');
+let availableLanguages = [];
+
+function connectLanguageSearch() {
+  const languageSelect = languageHost?.querySelector('.goog-te-combo');
+  if (!languageSelect || languageSelect.dataset.searchReady) return Boolean(languageSelect);
+
+  languageSelect.dataset.searchReady = 'true';
+  availableLanguages = Array.from(languageSelect.options).map(option => ({
+    text: option.text,
+    value: option.value
+  }));
+
+  languageSearch?.addEventListener('input', () => {
+    const query = languageSearch.value.trim().toLowerCase();
+    const currentValue = languageSelect.value;
+    const matches = availableLanguages.filter(language =>
+      !query || language.text.toLowerCase().includes(query)
+    );
+
+    languageSelect.replaceChildren(...matches.map(language => {
+      const option = document.createElement('option');
+      option.textContent = language.text;
+      option.value = language.value;
+      return option;
+    }));
+
+    if (matches.some(language => language.value === currentValue)) {
+      languageSelect.value = currentValue;
+    }
+  });
+
+  return true;
+}
+
+if (languageHost) {
+  const languageObserver = new MutationObserver(connectLanguageSearch);
+  languageObserver.observe(languageHost, { childList: true, subtree: true });
+  connectLanguageSearch();
+}
+
 document.getElementById('ai-chat-btn').addEventListener('click', openGeminiDrawer);
 document.getElementById('saved-btn').addEventListener('click', () => {
   document.querySelector('.sites-container')?.scrollIntoView({ behavior: 'smooth' });
