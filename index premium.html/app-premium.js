@@ -6,6 +6,7 @@ class BharatVirasat {
     this.heritageData = window.heritageData || [];
     this.filteredData = [...this.heritageData];
     this.userPreferences = this.loadPreferences();
+    this.localReviews = this.loadLocalReviews();
     this.darkMode = localStorage.getItem('darkMode') === 'true';
     this.init();
   }
@@ -54,10 +55,23 @@ class BharatVirasat {
     zoneButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         zoneButtons.forEach(b => b.classList.remove('active'));
-        e.target.closest('button').classList.add('active');
+        const selectedButton = e.target.closest('button');
+        selectedButton.classList.add('active');
+        const regionSelect = document.querySelector('.zone-select');
+        if (regionSelect) regionSelect.value = selectedButton.dataset.filter || '';
         this.applyFilters();
       });
     });
+
+    const regionSelect = document.querySelector('.zone-select');
+    if (regionSelect) {
+      regionSelect.addEventListener('change', () => {
+        zoneButtons.forEach(button => {
+          button.classList.toggle('active', (button.dataset.filter || '') === regionSelect.value);
+        });
+        this.applyFilters();
+      });
+    }
 
     // Time input
     const timeInput = document.getElementById('exploration-time');
@@ -93,19 +107,19 @@ class BharatVirasat {
 
     // Category filter
     const activeCategory = document.querySelector('.category-filter.active');
-    if (activeCategory && activeCategory.textContent !== 'All Heritage Sites') {
-      const category = activeCategory.textContent.replace(/[^a-zA-Z\s]/g, '').trim();
+    if (activeCategory?.dataset.filter) {
+      const categories = activeCategory.dataset.filter.split(',');
       this.filteredData = this.filteredData.filter(site =>
-        site.category && site.category.toLowerCase().includes(category.toLowerCase())
+        categories.includes(site.category)
       );
     }
 
     // Zone filter
     const activeZone = document.querySelector('.zone-filter.active');
-    if (activeZone && activeZone.textContent !== 'All India') {
-      const zone = activeZone.textContent.trim();
+    const selectedZone = document.querySelector('.zone-select')?.value || activeZone?.dataset.filter;
+    if (selectedZone) {
       this.filteredData = this.filteredData.filter(site =>
-        site.zone && site.zone.toLowerCase().includes(zone.toLowerCase())
+        site.zone === selectedZone
       );
     }
 
@@ -126,7 +140,14 @@ class BharatVirasat {
 
     if (selectedInterests.length > 0) {
       this.filteredData = this.filteredData.filter(site => {
-        const siteKeywords = (site.keywords || '').toLowerCase();
+        const siteKeywords = [
+          site.keywords,
+          ...(site.tags || []),
+          site.category,
+          site.architecturalStyle,
+          site.shortSummary,
+          site.description
+        ].filter(Boolean).join(' ').toLowerCase();
         return selectedInterests.some(interest =>
           siteKeywords.includes(interest.toLowerCase())
         );
@@ -157,14 +178,30 @@ class BharatVirasat {
     if (this.filteredData.length === 0) {
       container.innerHTML = `
         <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
-          <p style="font-size: 1.2rem; color: #666;">No heritage sites match your filters. Try adjusting your preferences!</p>
+          <p style="font-size: 1.2rem; color: #666;">No heritage sites match this combination yet.</p>
+          <button type="button" class="btn btn-primary clear-filters-btn" style="margin-top: 1rem;">Show All Heritage Sites</button>
         </div>
       `;
+      container.querySelector('.clear-filters-btn').addEventListener('click', () => this.clearFilters());
       return;
     }
 
     container.innerHTML = this.filteredData.map((site, idx) => this.createCard(site, idx)).join('');
     this.attachCardListeners();
+  }
+
+  clearFilters() {
+    document.querySelectorAll('.category-filter, .zone-filter').forEach(button => {
+      button.classList.toggle('active', button.dataset.filter === '');
+    });
+    const regionSelect = document.querySelector('.zone-select');
+    if (regionSelect) regionSelect.value = '';
+    document.querySelectorAll('.interest-filter').forEach(checkbox => {
+      checkbox.checked = false;
+    });
+    const timeInput = document.getElementById('exploration-time');
+    if (timeInput) timeInput.value = '';
+    this.applyFilters();
   }
 
   createCard(site, idx) {
@@ -305,6 +342,24 @@ class BharatVirasat {
         </ul>
 
         <p style="font-size: 0.9rem; margin-bottom: 1rem;"><strong>Sources:</strong> ${sourceLinks.join(' • ')}</p>
+        <div class="review-panel">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem;">⭐ Visitor Reviews</h3>
+          <p class="review-note">Community experiences are separate from the curated facts above. Please verify dates, prices, and access with official sources.</p>
+          <div class="review-list">${this.renderReviews(site.id)}</div>
+          <form class="review-form" data-site-id="${this.escapeHTML(site.id)}">
+            <label>Your name <input name="name" maxlength="40" required autocomplete="name"></label>
+            <label>Rating
+              <select name="rating" required>
+                <option value="">Choose stars</option>
+                <option value="5">★★★★★</option><option value="4">★★★★</option>
+                <option value="3">★★★</option><option value="2">★★</option><option value="1">★</option>
+              </select>
+            </label>
+            <label>Your experience <textarea name="review" maxlength="500" required placeholder="Share a helpful visit tip or experience"></textarea></label>
+            <button class="btn btn-secondary" type="submit">Post Review</button>
+            <small class="review-status" aria-live="polite">Reviews are moderated by validation and stored on this site's server.</small>
+          </form>
+        </div>
 
         <button class="btn btn-primary" style="width: 100%;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.name + ', ' + (site.location || site.state))}', '_blank', 'noopener')">
           📍 Open Directions
@@ -325,19 +380,96 @@ class BharatVirasat {
     modal.querySelector('.modal-close').addEventListener('click', () => {
       modal.classList.remove('active');
     });
+    modal.querySelector('.review-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      this.submitReview(site.id, new FormData(event.currentTarget), event.currentTarget);
+    });
+    this.loadRemoteReviews(site.id, modal.querySelector('.review-list'));
+  }
+
+  escapeHTML(value) {
+    return String(value).replace(/[&<>'"]/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[character]));
+  }
+
+  loadLocalReviews() {
+    try {
+      return JSON.parse(localStorage.getItem('bharat-reviews') || '{}');
+    } catch (error) {
+      return {};
+    }
+  }
+
+  renderReviews(siteId) {
+    const reviews = this.localReviews[siteId] || [];
+    if (!reviews.length) return '<p class="review-empty">No reviews yet. Be the first to share a useful visit tip.</p>';
+    return reviews.slice(-10).reverse().map(review => `
+      <article class="review-item">
+        <strong>${this.escapeHTML(review.name)}</strong>
+        <span>${'★'.repeat(Number(review.rating))}${'☆'.repeat(5 - Number(review.rating))}</span>
+        <p>${this.escapeHTML(review.review)}</p>
+      </article>
+    `).join('');
+  }
+
+  async loadRemoteReviews(siteId, reviewList) {
+    try {
+      const response = await fetch(`/api/reviews?siteId=${encodeURIComponent(siteId)}`);
+      if (!response.ok) return;
+      const result = await response.json();
+      this.localReviews[siteId] = Array.isArray(result.reviews) ? result.reviews.slice(-10) : [];
+      if (reviewList.isConnected) reviewList.innerHTML = this.renderReviews(siteId);
+    } catch (error) {
+      // Direct file opens have no API origin; local reviews remain available.
+    }
+  }
+
+  async submitReview(siteId, formData, form) {
+    const status = form.querySelector('.review-status');
+    const payload = {
+      siteId,
+      name: String(formData.get('name') || '').trim(),
+      rating: Number(formData.get('rating')),
+      review: String(formData.get('review') || '').trim()
+    };
+    if (!payload.name || !payload.review || !Number.isInteger(payload.rating) || payload.rating < 1 || payload.rating > 5 || payload.review.length > 500) {
+      status.textContent = 'Please add a name, choose 1-5 stars, and keep the review under 500 characters.';
+      return;
+    }
+    try {
+      const response = await fetch('/api/reviews', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error('Review service unavailable');
+      const result = await response.json();
+      this.localReviews[siteId] = [...(this.localReviews[siteId] || []), result.review].slice(-10);
+      status.textContent = 'Thanks. Your review is now visible to visitors using this site.';
+    } catch (error) {
+      this.localReviews[siteId] = [...(this.localReviews[siteId] || []), { ...payload, createdAt: new Date().toISOString() }].slice(-10);
+      localStorage.setItem('bharat-reviews', JSON.stringify(this.localReviews));
+      status.textContent = 'Saved on this browser. Start the site server to share it with other visitors.';
+    }
+    form.reset();
+    form.closest('.review-panel').querySelector('.review-list').innerHTML = this.renderReviews(siteId);
   }
 
   // ===== STATISTICS =====
   updateStats() {
     const totalSites = this.heritageData.length;
+    const unescoSites = this.heritageData.filter(site => site.unescoStatus?.toLowerCase().includes('unesco world heritage site')).length;
     const listedSites = this.filteredData.length;
     const uniqueZones = [...new Set(this.heritageData.map(s => s.zone))].length;
     const uniqueCategories = [...new Set(this.heritageData.map(s => s.category))].length;
 
     const statsHtml = `
       <div class="stat-card">
-        <div class="stat-number">${totalSites}+</div>
-        <div class="stat-label">UNESCO Heritage Sites</div>
+        <div class="stat-number">${totalSites}</div>
+        <div class="stat-label">Heritage Sites</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">${unescoSites}</div>
+        <div class="stat-label">UNESCO World Heritage Sites</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">${uniqueZones}</div>
@@ -371,7 +503,11 @@ class BharatVirasat {
   }
 
   loadPreferences() {
-    return JSON.parse(localStorage.getItem('bharat-preferences')) || {};
+    try {
+      return JSON.parse(localStorage.getItem('bharat-preferences') || '{}');
+    } catch (error) {
+      return {};
+    }
   }
 }
 

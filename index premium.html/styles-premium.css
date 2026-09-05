@@ -486,6 +486,97 @@ body.dark-mode .card-subtitle {
   flex: 1;
 }
 
+.review-panel {
+  border-top: 1px solid rgba(128, 128, 128, 0.25);
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+}
+
+.review-note,
+.review-empty,
+.review-status {
+  color: #666;
+  font-size: 0.88rem;
+}
+
+.review-list {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1rem 0;
+}
+
+.review-item {
+  background: rgba(212, 175, 55, 0.08);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.review-item > span {
+  color: #b8860b;
+  float: right;
+}
+
+.review-item p {
+  margin: 0.4rem 0 0;
+}
+
+.review-form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.review-form label {
+  display: grid;
+  gap: 0.3rem;
+  font-weight: 600;
+}
+
+.review-form input,
+.review-form select,
+.review-form textarea {
+  border: 1px solid rgba(128, 128, 128, 0.45);
+  border-radius: 6px;
+  font: inherit;
+  padding: 0.6rem;
+}
+
+.gemini-chat-tools {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+  padding: 0.75rem 1rem;
+}
+
+.gemini-chat-tools label {
+  display: block;
+  font-size: 0.78rem;
+  margin-bottom: 0.3rem;
+}
+
+.gemini-chat-tools select {
+  width: 100%;
+  padding: 0.45rem;
+}
+
+.gemini-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.gemini-prompts button {
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.55rem;
+}
+
+.review-form textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
 body.dark-mode .card-description {
   color: #ccc;
 }

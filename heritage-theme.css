@@ -1,0 +1,125 @@
+/* BharatVirasat alternate visual theme */
+
+:root {
+  --primary: #b56b35;
+  --primary-dark: #8d4d25;
+  --bg-light: #f4efe7;
+  --text-dark: #24201c;
+  --accent: #1f6f68;
+  --card-shadow: 0 14px 32px rgba(55, 39, 25, 0.14);
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(181, 107, 53, 0.12), transparent 28rem),
+    linear-gradient(135deg, #f7f2e9 0%, #eee4d6 100%);
+  color: #24201c;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+body.dark-mode {
+  background: #182522;
+  color: #f4efe7;
+}
+
+header {
+  background: linear-gradient(135deg, #183d3a 0%, #102725 100%);
+  border-bottom: 3px solid #d29a58;
+}
+
+.brand,
+h1,
+h2,
+h3,
+.card-title,
+.section-title h2 {
+  letter-spacing: 0;
+}
+
+.hero {
+  background:
+    linear-gradient(90deg, rgba(16, 39, 37, 0.92), rgba(16, 39, 37, 0.55)),
+    url('../images/Group of Monuments at Hampi.jpg') center / cover;
+  min-height: 520px;
+}
+
+.hero .highlight {
+  color: #f0b866;
+}
+
+.btn-primary,
+.btn-secondary:hover,
+.category-filter.active,
+.zone-filter.active {
+  background: #b56b35 !important;
+  border-color: #b56b35 !important;
+  color: #fffaf2 !important;
+}
+
+.btn-secondary {
+  border-color: #b56b35;
+  color: #8d4d25;
+}
+
+.personalization,
+.state-guide,
+.creator-note {
+  border-color: #b56b35;
+  box-shadow: 0 10px 28px rgba(55, 39, 25, 0.08);
+}
+
+.card {
+  border: 1px solid rgba(181, 107, 53, 0.22);
+  border-radius: 6px;
+  box-shadow: var(--card-shadow);
+}
+
+.card:hover {
+  border-color: #b56b35;
+  transform: translateY(-6px);
+}
+
+.card-badge {
+  background: #1f6f68;
+}
+
+.stats {
+  gap: 0.75rem;
+}
+
+.stat-card {
+  border-left: 4px solid #1f6f68;
+  border-radius: 4px;
+}
+
+.review-panel,
+.audio-guide-panel,
+.ticket-panel {
+  border-color: rgba(181, 107, 53, 0.45);
+}
+
+.gemini-drawer-header {
+  background: #183d3a;
+}
+
+.gemini-input-row button,
+.gemini-prompts button {
+  background: #1f6f68;
+  border-color: #1f6f68;
+  color: #fffaf2;
+}
+
+footer {
+  background: #183d3a;
+  border-top: 4px solid #d29a58;
+}
+
+@media (max-width: 680px) {
+  .hero {
+    min-height: 460px;
+  }
+
+  header {
+    padding: 0.85rem 1rem;
+  }
+}

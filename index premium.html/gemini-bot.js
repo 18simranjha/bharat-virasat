@@ -6,6 +6,8 @@
 class GeminiCulturalSage {
   constructor() {
     this.history = [];
+    this.maxHistory = 8;
+    this.connectionNoticeShown = false;
     this.isTyping = false;
     this.synth = window.speechSynthesis;
     this.recognition = null;
@@ -292,22 +294,39 @@ India's heritage spans over 5,000 years of civilization, embracing:
     } catch (error) {
       console.warn('Gemini server unavailable; using local knowledge:', error);
       this.removeTypingIndicator();
-      this.addMessageToUI('gemini', this.getGeminiResponse(text));
+      const notice = this.connectionNoticeShown ? '' : `⚠️ **Gemini is not connected yet**\n\n${this.getConnectionHelp(error)}\n\n`;
+      this.connectionNoticeShown = true;
+      this.addMessageToUI('gemini', `${notice}Here is a limited local heritage answer for now:\n\n${this.getGeminiResponse(text)}`);
     }
   }
 
+  getConnectionHelp(error) {
+    const message = String(error?.message || '');
+    if (message.includes('GEMINI_API_KEY')) {
+      return 'The server is running, but GEMINI_API_KEY is missing. Add it to the server .env file and restart the server.';
+    }
+    if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
+      return 'Start the backend with `python server.py`, then open the site through its http://127.0.0.1:8000 URL.';
+    }
+    return 'Check that the backend is running and that GEMINI_API_KEY is configured on the backend, never in this webpage.';
+  }
+
   async getApiResponse(message) {
-    const apiBase = window.BHARAT_API_BASE || '';
+    const apiBase = window.BHARAT_API_BASE || (window.location.protocol === 'file:' ? 'http://127.0.0.1:8000' : '');
+    const ageGroup = document.getElementById('gemini-age-group')?.value || 'adult';
     const response = await fetch(`${apiBase}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({ message, ageGroup, history: this.history.slice(-this.maxHistory) })
     });
 
     const result = await response.json();
     if (!response.ok || !result.answer) {
-      throw new Error(result.error || 'Gemini server request failed.');
+      throw new Error(result.details || result.error || 'Gemini server request failed.');
     }
+    this.history.push({ role: 'user', parts: [{ text: message }] });
+    this.history.push({ role: 'model', parts: [{ text: result.answer }] });
+    this.history = this.history.slice(-this.maxHistory);
     return result.answer;
   }
 
@@ -439,10 +458,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('gemini-mic-btn')?.addEventListener('click', () => geminiBot.toggleVoiceInput());
   document.getElementById('gemini-close-btn')?.addEventListener('click', closeGeminiDrawer);
   document.getElementById('gemini-drawer-backdrop')?.addEventListener('click', closeGeminiDrawer);
+  document.querySelectorAll('[data-gemini-prompt]').forEach(button => {
+    button.addEventListener('click', () => {
+      input.value = button.dataset.geminiPrompt || '';
+      geminiBot.handleSendMessage();
+    });
+  });
   input?.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') geminiBot.handleSendMessage();
   });
-  geminiBot.addMessageToUI('gemini', 'Namaste! Ask me about any of the heritage sites in Bharat Virasat.');
+  geminiBot.addMessageToUI('gemini', 'Namaste! I can explain heritage sites, build trip plans, share cultural context, or start a quiz. Choose an age style above for a playful or detailed answer.');
 });
 
 function closeGeminiDrawer() {

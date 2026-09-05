@@ -1,0 +1,28 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index premium.html/index premium.html"
+    },
+    {
+      "source": "/styles-premium.css",
+      "destination": "/index premium.html/styles-premium.css"
+    },
+    {
+      "source": "/app-premium.js",
+      "destination": "/index premium.html/app-premium.js"
+    },
+    {
+      "source": "/data.js",
+      "destination": "/index premium.html/data.js"
+    },
+    {
+      "source": "/gemini-bot.js",
+      "destination": "/index premium.html/gemini-bot.js"
+    },
+    {
+      "source": "/state-guides.js",
+      "destination": "/index premium.html/state-guides.js"
+    }
+  ]
+}

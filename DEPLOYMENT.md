@@ -48,6 +48,19 @@ ALLOWED_ORIGIN=https://your-frontend-domain.example
 
 The backend now allows only that exact frontend origin. Do not use `*` for `ALLOWED_ORIGIN`.
 
+## Deploy to Vercel
+
+Vercel can host this frontend and the lightweight Gemini functions in `api/`. The API key must be added in Vercel, not committed to GitHub.
+
+1. Push the repository to GitHub, including `vercel.json` and the `api/` folder.
+2. Go to [Vercel](https://vercel.com), sign in with GitHub, choose **Add New Project**, and import `bharat-virasat`.
+3. Keep **Framework Preset** as `Other`, leave the build command empty, and keep the root directory as `./`.
+4. Open **Settings > Environment Variables** and add `GEMINI_API_KEY` for Production, Preview, and Development. Add `GEMINI_MODEL` with `gemini-2.5-flash`.
+5. Deploy. The root URL is rewritten to the premium page by `vercel.json`.
+6. Check `https://your-domain.vercel.app/api/health`. It should return `"ok": true` and `"geminiConfigured": true`.
+
+The current review storage uses a local JSON file and is not persistent on Vercel serverless deployments. Keep browser-local reviews for the demo or connect a hosted database before relying on shared public reviews.
+
 ## Second gallery image
 
 For a second angle, place a side-view image beside the main image using `-side` before the extension:
