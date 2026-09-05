@@ -266,6 +266,12 @@ body.dark-mode {
   outline-offset: 2px;
 }
 
+#language-search-status {
+  min-height: 1rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.7rem;
+}
+
 #google_translate_element select,
 #google_translate_element .goog-te-combo {
   width: 100%;

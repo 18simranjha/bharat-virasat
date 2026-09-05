@@ -26,6 +26,7 @@
       <label for="language-search">Language</label>
       <input id="language-search" type="search" placeholder="Search language..." autocomplete="off">
       <div id="google_translate_element" aria-label="Choose language"></div>
+      <span id="language-search-status" aria-live="polite"></span>
     </div>
     <button id="ai-chat-btn">💬 AI Chat</button>
     <button id="saved-btn">❤️ Saved</button>
@@ -328,6 +329,18 @@ function connectLanguageSearch() {
 
     if (matches.some(language => language.value === currentValue)) {
       languageSelect.value = currentValue;
+    }
+
+    const exactMatch = matches.find(language => language.text.toLowerCase() === query);
+    const status = document.getElementById('language-search-status');
+    if (exactMatch) {
+      languageSelect.value = exactMatch.value;
+      languageSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      if (status) status.textContent = `${exactMatch.text} selected`;
+    } else if (query && status) {
+      status.textContent = matches.length ? `${matches.length} languages found` : 'No language found';
+    } else if (status) {
+      status.textContent = '';
     }
   });
 
