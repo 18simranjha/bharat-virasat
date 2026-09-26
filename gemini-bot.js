@@ -397,7 +397,7 @@ India's heritage spans over 5,000 years of civilization, embracing:
   }
 
   formatMarkdown(text) {
-    let formatted = text
+    let formatted = this.escapeHTML(String(text))
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/`(.*?)`/g, '<code>$1</code>')
@@ -412,6 +412,12 @@ India's heritage spans over 5,000 years of civilization, embracing:
     // Wrap li groups in ul
     formatted = formatted.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
     return formatted;
+  }
+
+  escapeHTML(value) {
+    return value.replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[character]));
   }
 
   escapeForSpeech(text) {

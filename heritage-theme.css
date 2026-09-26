@@ -39,7 +39,7 @@ h3,
 .hero {
   background:
     linear-gradient(90deg, rgba(16, 39, 37, 0.92), rgba(16, 39, 37, 0.55)),
-    url('../images/Group of Monuments at Hampi.jpg') center / cover;
+    url('images/Group of Monuments at Hampi.jpg') center / cover;
   min-height: 520px;
 }
 

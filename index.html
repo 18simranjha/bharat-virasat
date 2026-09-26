@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BharatVirasat - AI Heritage Explorer</title>
+  <meta name="description" content="Discover the rich culture, historic temples, and monuments of India with Bharat Virasat.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="styles-premium.css">
+  <link rel="stylesheet" href="heritage-theme.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22>🏛️</text></svg>">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8116673520430387"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- AMBIENT HERITAGE CANVAS BACKGROUND -->
+<canvas id="ambient-canvas"></canvas>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <div class="logo">
+      <span>🏛️</span>
+      <div class="logo-text">
+        <div class="brand">BHARAT VIRASAT</div>
+        <div class="tagline">PREMIUM ARCHIVE</div>
+      </div>
+    </div>
+  </div>
+  <div class="header-controls">
+    <div class="language-tools">
+      <label for="language-search">Language</label>
+      <input id="language-search" type="search" placeholder="Search language..." autocomplete="off">
+      <div id="google_translate_element" aria-label="Choose language"></div>
+      <span id="language-search-status" aria-live="polite"></span>
+    </div>
+
+    <!-- AUTH HEADER TRIGGER & LOGGED-IN STATUS -->
+    <div id="auth-header-slot" style="display: inline-flex; align-items: center;">
+      <button id="open-auth-btn" class="header-action-btn" type="button">🔑 Sign In</button>
+      <div id="user-pill" style="display: none; align-items: center; gap: 8px;">
+  <span id="user-display-email" style="font-size: 0.85rem; font-weight: 600; color: #d4af37;"></span>
+  <a href="my-journey.html" class="header-action-btn" style="text-decoration: none; border-color: #d4af37; color: #d4af37; display: inline-flex; align-items: center; gap: 4px;">🌿 Travel Tree</a>
+  <button id="logout-btn" class="header-action-btn" style="border-color: #ef4444; color: #ef4444;" type="button">Logout</button>
+</div>
+    </div>
+
+    <button id="ai-chat-btn" class="header-action-btn">💬 AI Chat</button>
+    <button id="saved-btn" class="header-action-btn">❤️ Saved</button>
+    <button class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+  </div>
+</header>
+
+<nav class="chapter-nav" aria-label="Explore BharatVirasat">
+  <a href="#journey" class="active">Journey</a>
+  <a href="#discover">Curated Decks</a>
+  <a href="#state-heritage-guide">State Guides</a>
+  <a href="#heritage-test">Quiz</a>
+  <a href="#about-creators">About</a>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero" id="journey">
+  <div class="hero-content">
+    <div class="hero-badge">🏆 UNESCO & ASI DIGITAL ARCHIVE</div>
+    <h1>
+      Discover India's <span class="highlight">Living Legends</span><br>
+      Reimagined in 3D
+    </h1>
+    <p>AI-guided cultural exploration of timeless citadels, rock-cut marvels, and living monuments across the subcontinent.</p>
+    <div class="hero-buttons">
+      <button class="btn btn-primary" id="start-journey-btn">✨ Start Curated Journey</button>
+      <button class="btn btn-secondary" id="watch-demo-btn">🎬 Ask AI Guide</button>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK DASHBOARD -->
+<section class="quick-dashboard" aria-label="Heritage explorer dashboard">
+  <div class="dashboard-heading">
+    <p class="eyebrow">EXPLORER QUICK ACCESS</p>
+    <h2>Choose your next adventure</h2>
+  </div>
+  <div class="dashboard-actions">
+    <a class="dashboard-action" href="#personalization">
+      <span class="dashboard-icon">01</span>
+      <span><strong>Personalize</strong><small>Tailor your visit time & region</small></span>
+      <span class="dashboard-arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="dashboard-action" href="#discover">
+      <span class="dashboard-icon">02</span>
+      <span><strong>3D Decks</strong><small>Interactive 3D coverflow showcase</small></span>
+      <span class="dashboard-arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="dashboard-action" href="#state-heritage-guide">
+      <span class="dashboard-icon">03</span>
+      <span><strong>State Guides</strong><small>Verified route & ticketing plans</small></span>
+      <span class="dashboard-arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<div class="content-shell">
+  <!-- PERSONALIZATION ENGINE -->
+  <section class="personalization reveal" id="personalization">
+    <div class="section-title">
+      <h2>🎯 Tailor Your Exploration</h2>
+      <p>Configure filters to customize recommendations across all 3D decks and guides.</p>
+    </div>
+
+    <div class="filters-container">
+      <div class="filter-group">
+        <label for="exploration-time">⏱️ Time Budget</label>
+        <select id="exploration-time">
+          <option value="">Any Duration</option>
+          <option value="1">1 Hour Quick Visit</option>
+          <option value="3">3 Hours - Half Day</option>
+          <option value="6">6 Hours - Full Day</option>
+          <option value="12">12+ Hours - Deep Expedition</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="region-select">📍 Geographic Zone</label>
+        <select id="region-select" class="zone-select">
+          <option value="">All Regions</option>
+          <option value="North">North India</option>
+          <option value="South">South India</option>
+          <option value="East">East India</option>
+          <option value="West">West India</option>
+          <option value="Central">Central India</option>
+          <option value="Northeast">Northeast India</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>🎭 Cultural Focus</label>
+        <div class="checkbox-grid">
+          <label class="custom-checkbox">
+            <input type="checkbox" class="interest-filter" value="ancient">
+            <span>Ancient History</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" class="interest-filter" value="architecture">
+            <span>Architecture & Art</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" class="interest-filter" value="spiritual">
+            <span>Spiritual Temples</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" class="interest-filter" value="royalty">
+            <span>Citadels & Palaces</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats"></div>
+  </section>
+
+  <!-- SEARCH & QUICK FILTER TOOLS -->
+  <div class="discover-tools reveal" id="discover">
+    <div class="search-bar-wrapper">
+      <input type="text" id="site-search-input" placeholder="🔍 Search monuments, dynasties, states (e.g., Shaniwarwada, Chola, Hampi)..." aria-label="Search heritage sites">
+    </div>
+
+    <div class="filter-section">
+      <h3 class="filter-title">🏛️ Quick Category Navigation</h3>
+      <div class="filter-chips">
+        <button class="btn btn-primary category-filter active" data-filter="">🏛️ All Decks</button>
+        <button class="btn btn-secondary category-filter" data-filter="Forts & Palaces">🏰 Forts & Palaces</button>
+        <button class="btn btn-secondary category-filter" data-filter="Temples & Sacred">🛕 Sacred Shrines</button>
+        <button class="btn btn-secondary category-filter" data-filter="Caves & Rock-Cut">⛰️ Rock-Cut & Caves</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h3 class="filter-title">🗺️ Zone Filters</h3>
+      <div class="filter-chips">
+        <button class="btn btn-primary zone-filter active" data-filter="">All Zones</button>
+        <button class="btn btn-secondary zone-filter" data-filter="North">North</button>
+        <button class="btn btn-secondary zone-filter" data-filter="South">South</button>
+        <button class="btn btn-secondary zone-filter" data-filter="East">East</button>
+        <button class="btn btn-secondary zone-filter" data-filter="West">West</button>
+        <button class="btn btn-secondary zone-filter" data-filter="Central">Central</button>
+        <button class="btn btn-secondary zone-filter" data-filter="Northeast">Northeast</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTI-DECK 3D COVERFLOW SECTION -->
+  <main>
+    <section class="marvels-section reveal">
+      <div class="section-title">
+        <h2>Curated Heritage Decks in 3D</h2>
+        <p>Swipe or drag cards horizontally to inspect architectural marvels in authentic 3D coverflow</p>
+      </div>
+
+      <div class="sites-container" id="decks-container">
+        <!-- Rendered by app-premium.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- STATE HERITAGE GUIDE -->
+  <section class="state-guide reveal" id="state-heritage-guide">
+    <div class="section-title">
+      <h2>🧭 State & Union Territory Explorer</h2>
+      <p>Explore UNESCO and ASI places, tickets, routes, and time-optimized itineraries.</p>
+    </div>
+    <label for="state-guide-select" style="font-weight: 700; display: block; margin-bottom: 0.5rem;">Choose a State / UT</label>
+    <select id="state-guide-select" aria-label="Choose a state heritage guide"></select>
+    <div id="state-guide-results"></div>
+  </section>
+
+  <!-- HERITAGE TEST SLIDE -->
+  <section class="heritage-test-slide reveal" id="heritage-test">
+    <div class="test-slide-copy">
+      <p class="eyebrow">INTERACTIVE HERITAGE QUIZ</p>
+      <h2>Can you identify this Indian marvel?</h2>
+      <p id="test-question">Which monument's stone chariot appears on the reverse of the Indian ₹50 note?</p>
+    </div>
+    <div class="test-options" id="test-options">
+      <button type="button" data-answer="wrong">Konark Sun Temple</button>
+      <button type="button" data-answer="correct">Hampi's Vittala Temple</button>
+      <button type="button" data-answer="wrong">Mahabalipuram Shore Temple</button>
+      <button type="button" data-answer="wrong">Brihadisvara Temple</button>
+    </div>
+    <p class="test-result" id="test-result" aria-live="polite"></p>
+    <button type="button" class="btn btn-primary" id="next-test-btn">Next question</button>
+  </section>
+
+  <!-- CREATOR NOTE -->
+  <section class="creator-note reveal" id="about-creators">
+    <p class="eyebrow">ABOUT THE CREATORS</p>
+    <h2>Team CODE:BLACK</h2>
+    <p class="creator-intro">BharatVirasat is a digital heritage project created to make India's monuments, living traditions, and cultural stories accessible through immersive modern web design.</p>
+    <div class="creator-grid">
+      <article><strong>Farhan Tamboli</strong><span>Architecture, interactive logic, and portal engineering.</span></article>
+      <article><strong>Samrat Jha</strong><span>AI prompt engineering, knowledge curation, and cultural synthesis.</span></article>
+      <article><strong>Simran Jha</strong><span>UI/UX verification, responsive visual review, and design systems.</span></article>
+      <article><strong>R&amp;D Team</strong><span>Harsh Satav, Ilisha Jain, and Dhhairya Khumbhar: field data and curation.</span></article>
+    </div>
+    <p class="creator-contact">For heritage stories, corrections, or collaboration: <a href="mailto:rsgaming8090@gmail.com">rsgaming8090@gmail.com</a></p>
+    <a class="creator-link" href="https://code-blac.netlify.app/" target="_blank" rel="noopener">Visit original CODE:BLACK heritage project →</a>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="journey-cta-section reveal">
+    <h2>Ready for Your Heritage Adventure?</h2>
+    <p>Personalized cultural exploration, smart audio companions, and itinerary planners at your fingertips.</p>
+    <button class="btn journey-cta" id="start-journey-now-btn" type="button">Begin Expedition Now →</button>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>🏛️ BharatVirasat Premium — Celebrating Indian Heritage Through Technology 🇮🇳</p>
+  <p>Powered by Google Gemini AI | Multilingual Support | 3D Interactive Galleries</p>
+  <p style="font-size: 0.85rem; opacity: 0.75; margin-top: 0.5rem;">Created with passion during Smart India Hackathon</p>
+  <p class="legal-links"><a href="legal.html#privacy">Privacy Policy</a> · <a href="legal.html#terms">Terms</a> · <a href="legal.html#cookies">Cookies</a></p>
+  <p class="footer-contact">Contact: <a href="mailto:rsgaming8090@gmail.com">rsgaming8090@gmail.com</a></p>
+</footer>
+
+<aside id="consent-banner" class="consent-banner" aria-label="Privacy choices" hidden>
+  <div>
+    <strong>Privacy &amp; Localization Choices</strong>
+    <p>Essential browser storage keeps preferences working. Google Translate is optional. <a href="legal.html#cookies">Read cookie policy</a>.</p>
+  </div>
+  <div class="consent-actions">
+    <button type="button" class="btn btn-secondary" id="reject-optional-cookies">Essential Only</button>
+    <button type="button" class="btn btn-primary" id="accept-optional-cookies">Enable Translation</button>
+  </div>
+</aside>
+
+<!-- DETAIL MODAL -->
+<div class="modal" id="detail-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Heritage Site Details</h2>
+      <button class="modal-close" aria-label="Close modal">&times;</button>
+    </div>
+    <div id="modal-body-placeholder">Loading...</div>
+  </div>
+</div>
+
+<!-- FLOATING BOTTOM-RIGHT AI CHAT FAB -->
+<button id="floating-ai-trigger" class="floating-ai-fab" type="button" aria-label="Open AI Heritage Guide">
+  <span class="fab-pulse"></span>
+  <span class="fab-icon">🏛️</span>
+</button>
+
+<!-- SLIDE-OVER AUTH MODAL (DARK SHADCN STYLE) -->
+<div id="auth-modal-backdrop" class="auth-backdrop"></div>
+<div id="auth-modal" class="auth-dialog" role="dialog" aria-modal="true" aria-hidden="true">
+  <button id="auth-close-btn" class="auth-close-btn" type="button" aria-label="Close Auth">&times;</button>
+  
+  <div class="auth-container">
+    <!-- Left: Auth Form -->
+    <div class="auth-form-side">
+      <div class="auth-header">
+        <h2 id="auth-title">Sign in to your account</h2>
+        <p id="auth-subtitle">Enter your email below to access your heritage trails</p>
+      </div>
+
+      <form id="auth-form" class="auth-form" autocomplete="on">
+        <div id="signup-name-group" class="form-group" style="display: none;">
+          <label for="auth-name">Full Name</label>
+          <input type="text" id="auth-name" placeholder="John Doe" autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="auth-email">Email</label>
+          <input type="email" id="auth-email" placeholder="m@example.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="auth-password">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="auth-password" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" id="toggle-pwd-btn" class="pwd-toggle-btn" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="auth-submit-btn" class="auth-primary-btn">Sign In</button>
+      </form>
+
+      <div class="auth-switch-text">
+        <span id="auth-switch-label">Don't have an account?</span>
+        <button type="button" id="auth-switch-btn" class="auth-link-btn">Sign up</button>
+      </div>
+
+      <div class="auth-divider">
+        <span>Or continue with</span>
+      </div>
+
+      <button type="button" id="google-auth-btn" class="google-signin-btn">
+        <img src="https://cdn.21st.dev/assets/mirror/38/38146bfd9eff6dbf0d74771f2e625c70d87d3770e0d080dbb6e50db1d5403f46.svg" alt="Google" width="16" height="16">
+        Continue with Google
+      </button>
+    </div>
+
+    <!-- Right: Visual Heritage Showcase with Typewriter -->
+    <div class="auth-visual-side">
+      <div class="auth-quote-box">
+        <blockquote class="auth-quote">
+          “<span id="auth-typewriter-target"></span><span class="auth-cursor">|</span>”
+        </blockquote>
+        <cite class="auth-cite">— Bharat Virasat AI Companion</cite>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI CHAT DRAWER -->
+<div id="gemini-drawer-backdrop" class="gemini-backdrop"></div>
+<aside id="gemini-chat-drawer" class="gemini-drawer" aria-label="Gemini heritage guide">
+  <div class="gemini-drawer-header">
+    <div><strong>Gemini Heritage Guide</strong><small>Ask questions about any Indian heritage site</small></div>
+    <button id="gemini-close-btn" type="button" aria-label="Close chat">&times;</button>
+  </div>
+  <div class="gemini-chat-tools">
+    <label for="gemini-age-group">Conversation Style</label>
+    <select id="gemini-age-group">
+      <option value="young-child">Ages 1-7: Playful Storyteller</option>
+      <option value="child">Ages 7-15: Quiz &amp; Discovery</option>
+      <option value="adult" selected>15+: Comprehensive Historian</option>
+    </select>
+    <div class="gemini-prompts">
+      <button type="button" data-gemini-prompt="Make a fun 1-day heritage plan for my city">1-day plan</button>
+      <button type="button" data-gemini-prompt="Give me a heritage quiz about India">Quiz me</button>
+      <button type="button" data-gemini-prompt="Plan a budget-friendly 3-day heritage trip">Budget trip</button>
+    </div>
+  </div>
+  <div id="gemini-messages" class="gemini-messages"></div>
+  <div class="gemini-input-row">
+    <input id="gemini-chat-input" type="text" placeholder="Ask about a monument, temple, or era..." autocomplete="off">
+    <button id="gemini-mic-btn" type="button" aria-label="Use voice input">🎙️</button>
+    <button id="gemini-send-btn" type="button">Send</button>
+  </div>
+</aside>
+
+<!-- FIREBASE SCRIPTS (COMPAT) -->
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+
+<!-- SCRIPTS IN STRICT SEQUENCE -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="data.js"></script>
+<script src="app-firebase.js"></script>
+<script src="app-premium.js"></script>
+<script src="gemini-bot.js"></script>
+<script src="state-guides.js"></script>
+
+<script>
+// Ambient Background Gold Dust Canvas (Subtle, lightweight, 60fps)
+(function() {
+  const canvas = document.getElementById('ambient-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width, height, particles = [];
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+
+  const count = Math.min(35, Math.floor(width / 35));
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 1.8 + 0.6,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: -Math.random() * 0.45 - 0.1,
+      alpha: Math.random() * 0.6 + 0.2
+    });
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+    for (let p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.y < -10) { p.y = height + 10; p.x = Math.random() * width; }
+      if (p.x < -10) p.x = width + 10;
+      if (p.x > width + 10) p.x = -10;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(render);
+  }
+  render();
+})();
+
+// Google Translate integration
+function loadGoogleTranslate() {
+  if (window.googleTranslateLoaded) return;
+  window.googleTranslateLoaded = true;
+  window.googleTranslateElementInit = function() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      autoDisplay: false,
+      includedLanguages: 'en,hi,bn,te,mr,ta,gu,kn,ml,pa,ur,or,as,sa,ne,sd,kok,mni,es,fr,de,it,pt,ru,ar,ja,ko,zh-CN',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  };
+  const script = document.createElement('script');
+  script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+  script.async = true;
+  document.head.appendChild(script);
+}
+
+const consentKey = 'bharat-consent-v1';
+const consentBanner = document.getElementById('consent-banner');
+const savedConsent = localStorage.getItem(consentKey);
+if (savedConsent === 'optional') loadGoogleTranslate();
+if (!savedConsent && consentBanner) consentBanner.hidden = false;
+document.getElementById('accept-optional-cookies')?.addEventListener('click', () => {
+  localStorage.setItem(consentKey, 'optional');
+  consentBanner.hidden = true;
+  loadGoogleTranslate();
+});
+document.getElementById('reject-optional-cookies')?.addEventListener('click', () => {
+  localStorage.setItem(consentKey, 'essential');
+  consentBanner.hidden = true;
+});
+
+// Language search connector
+const languageSearch = document.getElementById('language-search');
+const languageHost = document.getElementById('google_translate_element');
+let availableLanguages = [];
+
+function connectLanguageSearch() {
+  const languageSelect = languageHost?.querySelector('.goog-te-combo');
+  if (!languageSelect || languageSelect.dataset.searchReady) return Boolean(languageSelect);
+
+  languageSelect.dataset.searchReady = 'true';
+  availableLanguages = Array.from(languageSelect.options).map(option => ({
+    text: option.text,
+    value: option.value
+  }));
+
+  languageSearch?.addEventListener('input', () => {
+    const query = languageSearch.value.trim().toLowerCase();
+    const currentValue = languageSelect.value;
+    const matches = availableLanguages.filter(language =>
+      !query || language.text.toLowerCase().includes(query)
+    );
+
+    languageSelect.replaceChildren(...matches.map(language => {
+      const option = document.createElement('option');
+      option.textContent = language.text;
+      option.value = language.value;
+      return option;
+    }));
+
+    if (matches.some(language => language.value === currentValue)) {
+      languageSelect.value = currentValue;
+    }
+
+    const exactMatch = matches.find(language => language.text.toLowerCase() === query);
+    const status = document.getElementById('language-search-status');
+    if (exactMatch) {
+      languageSelect.value = exactMatch.value;
+      languageSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      if (status) status.textContent = `${exactMatch.text} selected`;
+    } else if (query && status) {
+      status.textContent = matches.length ? `${matches.length} languages found` : 'No language found';
+    } else if (status) {
+      status.textContent = '';
+    }
+  });
+  return true;
+}
+
+if (languageHost) {
+  const languageObserver = new MutationObserver(connectLanguageSearch);
+  languageObserver.observe(languageHost, { childList: true, subtree: true });
+  connectLanguageSearch();
+}
+
+// Nav Buttons
+document.getElementById('ai-chat-btn')?.addEventListener('click', () => typeof openGeminiDrawer === 'function' && openGeminiDrawer());
+document.getElementById('saved-btn')?.addEventListener('click', () => {
+  document.getElementById('decks-container')?.scrollIntoView({ behavior: 'smooth' });
+});
+document.getElementById('start-journey-btn')?.addEventListener('click', () => {
+  document.getElementById('discover')?.scrollIntoView({ behavior: 'smooth' });
+});
+document.getElementById('watch-demo-btn')?.addEventListener('click', () => typeof openGeminiDrawer === 'function' && openGeminiDrawer());
+document.getElementById('start-journey-now-btn')?.addEventListener('click', () => {
+  document.getElementById('discover')?.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Interactive Heritage Quiz
+const testQuestions = [
+  { question: "Which monument's stone chariot appears on the reverse of the Indian ₹50 note?", options: ["Konark Sun Temple", "Hampi's Vittala Temple", "Mahabalipuram Shore Temple", "Brihadisvara Temple"], answer: 1 },
+  { question: 'Which cave complex contains the monolithic rock-cut Kailasa Temple?', options: ['Ajanta Caves', 'Elephanta Caves', 'Ellora Caves', 'Kanheri Caves'], answer: 2 },
+  { question: 'Which site in Gujarat is renowned for its UNESCO-listed ornate subterranean stepwell?', options: ['Rani ki Vav', 'Sanchi', 'Dholavira', 'Nalanda'], answer: 0 }
+];
+let testIndex = 0;
+function renderTestQuestion() {
+  const test = testQuestions[testIndex];
+  document.getElementById('test-question').textContent = test.question;
+  document.querySelectorAll('#test-options button').forEach((button, index) => {
+    button.textContent = test.options[index];
+    button.dataset.answer = index === test.answer ? 'correct' : 'wrong';
+    button.disabled = false;
+  });
+  document.getElementById('test-result').textContent = '';
+}
+document.querySelectorAll('#test-options button').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('#test-options button').forEach(option => { option.disabled = true; });
+    document.getElementById('test-result').textContent = button.dataset.answer === 'correct' ? '✨ Correct! You have an authentic heritage eye.' : 'Not quite. Browse the 3D decks above and try again!';
+  });
+});
+document.getElementById('next-test-btn')?.addEventListener('click', () => {
+  testIndex = (testIndex + 1) % testQuestions.length;
+  renderTestQuestion();
+});
+
+// Intersection observer for section reveals
+const revealItems = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1 });
+  revealItems.forEach(item => revealObserver.observe(item));
+} else {
+  revealItems.forEach(item => item.classList.add('is-visible'));
+}
+
+const chapterLinks = document.querySelectorAll('.chapter-nav a');
+const chapterSections = document.querySelectorAll('#journey, #discover, #state-heritage-guide, #heritage-test, #about-creators');
+if ('IntersectionObserver' in window) {
+  const chapterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      chapterLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
+    });
+  }, { rootMargin: '-25% 0px -65% 0px' });
+  chapterSections.forEach(section => chapterObserver.observe(section));
+}
+
+// Close modal on outside click
+document.getElementById('detail-modal')?.addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>

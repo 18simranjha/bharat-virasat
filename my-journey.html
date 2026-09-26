@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Vintage Heritage Scrapbook - Bharat Virasat</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Caveat:wght@600;700&family=IM+Fell+English:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold-primary: #d4af37;
+      --gold-deep: #8f5b1d;
+      --desk-wood: #140d08;
+      --aged-paper: #ecdcc3;
+      --ink: #2b1f14;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--desk-wood);
+      background-image: 
+        radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 65%),
+        radial-gradient(circle at 10% 90%, rgba(55, 30, 15, 0.7) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(55, 30, 15, 0.7) 0%, transparent 50%);
+      color: #f4f4f5;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* TOP BAR */
+    .album-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 32px;
+      background: rgba(12, 9, 6, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .album-nav a {
+      color: var(--gold-primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s;
+    }
+    .album-nav a:hover { transform: translateX(-3px); }
+
+    .user-pill {
+      font-size: 0.82rem;
+      color: #d4d4d8;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 5px 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .user-pill strong { color: var(--gold-primary); }
+
+    /* VIEWPORT */
+    .viewport {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-text {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header-text span {
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .header-text h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.2rem;
+      color: #fff;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+      text-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+    }
+
+    .header-text p {
+      color: #a1a1aa;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    /* ACTION BAR */
+    .album-action-bar {
+      width: 100%;
+      max-width: 1100px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 0 10px;
+    }
+
+    .album-action-bar.visible {
+      display: flex;
+    }
+
+    .btn-close-book {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: var(--gold-primary);
+      padding: 7px 18px;
+      border-radius: 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-close-book:hover { background: rgba(212, 175, 55, 0.2); transform: scale(1.03); }
+
+    /* BOOK STAGE */
+    .book-stage {
+      position: relative;
+      margin: 15px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .closed-book-card {
+      width: 380px;
+      height: 530px;
+      background: 
+        radial-gradient(circle at 60% 40%, rgba(139, 90, 43, 0.25) 0%, transparent 60%),
+        linear-gradient(135deg, #d8c29d 0%, #caa778 45%, #b28652 100%);
+      border: 4px solid #3b200e;
+      border-radius: 8px 24px 24px 8px;
+      box-shadow: 
+        0 25px 60px rgba(0,0,0,0.9),
+        inset 0 0 45px rgba(80, 45, 15, 0.6);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 30px;
+      position: relative;
+      transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), box-shadow 0.4s;
+    }
+
+    .closed-book-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 35px 70px rgba(0,0,0,0.95), 0 0 25px rgba(212, 175, 55, 0.35);
+    }
+
+    .corner-brass {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border: 3px solid #8f5b1d;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .corner-tl { top: 12px; left: 16px; border-right: none; border-bottom: none; border-radius: 4px 0 0 0; }
+    .corner-tr { top: 12px; right: 16px; border-left: none; border-bottom: none; border-radius: 0 16px 0 0; }
+    .corner-bl { bottom: 12px; left: 16px; border-right: none; border-top: none; border-radius: 0 0 0 4px; }
+    .corner-br { bottom: 12px; right: 16px; border-left: none; border-top: none; border-radius: 0 0 16px 0; }
+
+    .outer-leather-strap {
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 75px;
+      height: 32px;
+      background: linear-gradient(180deg, #44200d, #250f04);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      border-radius: 4px 10px 10px 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+    }
+
+    .outer-buckle {
+      width: 20px;
+      height: 24px;
+      border: 2px solid #ffd700;
+      border-radius: 4px;
+      background: #000;
+      box-shadow: inset 0 0 4px rgba(255, 215, 0, 0.6);
+    }
+
+    .outer-cover-emblem {
+      width: 125px;
+      height: 125px;
+      border: 3px double #78481c;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, #f3e5ce 0%, #c49d68 85%);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      margin-bottom: 22px;
+      font-size: 2.6rem;
+    }
+
+    .outer-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #3d210b;
+      text-align: center;
+      letter-spacing: 2px;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .outer-sub {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: #633917;
+    }
+
+    .open-cue-badge {
+      margin-top: 32px;
+      font-size: 0.76rem;
+      color: #3b220c;
+      background: rgba(255, 245, 230, 0.75);
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 1px solid #8b5b29;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      animation: pulseOpen 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseOpen {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* OPEN SCRAPBOOK SPREAD */
+    .open-spread-card {
+      display: none;
+      width: 100%;
+      max-width: 1100px;
+      min-height: 600px;
+      background: 
+        radial-gradient(circle at 20% 40%, rgba(139, 90, 43, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 60%, rgba(139, 90, 43, 0.15) 0%, transparent 50%),
+        linear-gradient(to right, #decba4 0%, #ece0ca 25%, #f1e7d4 50%, #ece0ca 75%, #decba4 100%);
+      border: 4px solid #4a2810;
+      border-radius: 12px 24px 24px 12px;
+      box-shadow: 
+        0 25px 60px rgba(0,0,0,0.85),
+        inset 0 0 50px rgba(100, 60, 20, 0.4);
+      position: relative;
+      animation: bookFadeIn 0.45s ease-out;
+    }
+
+    @keyframes bookFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .open-spread-body {
+      display: grid;
+      grid-template-columns: 1fr;
+      width: 100%;
+      min-height: 600px;
+    }
+
+    @media (min-width: 860px) {
+      .open-spread-body {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .open-spread-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 32px;
+        background: linear-gradient(90deg, 
+          rgba(60, 30, 10, 0.35) 0%, 
+          rgba(60, 30, 10, 0.05) 30%, 
+          rgba(255, 255, 255, 0.1) 50%, 
+          rgba(60, 30, 10, 0.05) 70%, 
+          rgba(60, 30, 10, 0.35) 100%
+        );
+        pointer-events: none;
+      }
+    }
+
+    .leaf-page {
+      padding: 30px 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .page-ephemera-header {
+      border-bottom: 2px dashed #997448;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IM Fell English', serif;
+      color: #5c3a1e;
+      font-size: 0.95rem;
+    }
+
+    .vintage-pocket-mount {
+      background: linear-gradient(135deg, #a6845c, #8b6b45);
+      border: 1px solid #5a3c1e;
+      border-radius: 8px;
+      padding: 16px 14px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .pocket-strap {
+      position: absolute;
+      top: 50%;
+      left: -6px;
+      right: -6px;
+      transform: translateY(-50%);
+      height: 22px;
+      background: linear-gradient(180deg, #3d1b09, #240e04);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .pocket-strap-buckle {
+      width: 24px;
+      height: 18px;
+      border: 2px solid #ffd700;
+      border-radius: 3px;
+      background: #000;
+    }
+
+    .add-memory-card-btn {
+      width: 100%;
+      border: 2px dashed #6b4423;
+      border-radius: 8px;
+      background: rgba(255, 248, 235, 0.65);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+
+    .add-memory-card-btn:hover {
+      background: rgba(255, 248, 235, 0.95);
+      transform: translateY(-3px);
+      border-color: #aa7c11;
+      box-shadow: 0 8px 18px rgba(100, 60, 20, 0.25);
+    }
+
+    .plus-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #5c3a1e;
+      color: #f7e7b4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 6px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+      transition: transform 0.2s;
+    }
+
+    .add-memory-card-btn:hover .plus-circle {
+      transform: scale(1.1) rotate(90deg);
+      background: #8b5a2b;
+    }
+
+    .add-btn-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #3b220c;
+    }
+
+    .add-btn-sub {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: #6b4423;
+      margin-top: 2px;
+    }
+
+    .memories-mosaic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px 16px;
+      margin-top: 10px;
+    }
+
+    .vintage-photo-mount {
+      background: #fff;
+      padding: 8px 8px 16px;
+      border-radius: 2px;
+      box-shadow: 
+        0 6px 14px rgba(0,0,0,0.22),
+        0 1px 3px rgba(0,0,0,0.12);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s;
+    }
+
+    .vintage-photo-mount:hover {
+      transform: translateY(-8px) scale(1.05) rotate(1deg);
+      box-shadow: 0 14px 26px rgba(0,0,0,0.35);
+      z-index: 10;
+    }
+
+    .vintage-photo-mount::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      width: 44px;
+      height: 16px;
+      background: rgba(220, 195, 150, 0.85);
+      border: 1px dashed rgba(120, 80, 40, 0.3);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transform: rotate(-3deg);
+    }
+
+    .photo-crop-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #2b1f14;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+
+    .photo-crop-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-handwritten-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.18rem;
+      color: #27272a;
+      font-weight: 700;
+      margin-top: 8px;
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .photo-date-badge {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.72rem;
+      color: #8b5a2b;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* MODAL BASE */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+    }
+
+    .modal-dialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 480px;
+      background: #141824;
+      border: 2px solid var(--gold-primary);
+      border-radius: 20px;
+      padding: 24px;
+      z-index: 2001;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h3 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold-primary);
+      font-size: 1.25rem;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: #a1a1aa;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+    }
+
+    .form-group input, .form-group textarea {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #fff;
+      padding: 9px 12px;
+      font-size: 0.88rem;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--gold-primary);
+    }
+
+    .image-preview-box {
+      width: 75px;
+      height: 75px;
+      border: 2px solid var(--gold-primary);
+      border-radius: 6px;
+      margin: 8px auto 0;
+      overflow: hidden;
+      display: none;
+      background: #000;
+    }
+    .image-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-submit-memory {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-deep));
+      color: #0b0d14;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* INSPECT / FLIPPED JOURNAL DIALOG */
+    .inspect-dialog {
+      background: #fbf5e9 !important;
+      color: #27272a !important;
+      border: 3px double #8f5b1d !important;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9) !important;
+      text-align: center;
+    }
+
+    .inspect-dialog h3 { color: #5c3a1e !important; }
+
+    .inspect-polaroid-frame {
+      width: 180px;
+      background: #fff;
+      padding: 8px 8px 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      border: 1px solid #d4c2a5;
+      margin: 0 auto 16px;
+      transform: rotate(-1.5deg);
+    }
+
+    .inspect-polaroid-frame img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .handwritten-notes-area {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      line-height: 1.5;
+      color: #1f2937;
+      background: #f3e9d2;
+      border: 1px dashed #c4b091;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0 20px;
+      min-height: 90px;
+      text-align: left;
+    }
+
+    .btn-delete-memory {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #dc2626;
+      padding: 7px 18px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-delete-memory:hover {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    /* REALISTIC PAPER TEAR ANIMATION */
+    @keyframes paperTearAway {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+        filter: drop-shadow(0 25px 60px rgba(0,0,0,0.9));
+      }
+      20% {
+        transform: translate(-52%, -54%) rotate(-3deg) scale(1.02);
+      }
+      45% {
+        transform: translate(-45%, -40%) rotate(12deg) scale(0.95);
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 80% 90%, 60% 82%, 40% 88%, 20% 80%, 0 85%);
+      }
+      75% {
+        transform: translate(-40%, 15%) rotate(24deg) scale(0.8);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-30%, 80%) rotate(42deg) scale(0.4);
+        opacity: 0;
+        filter: blur(4px);
+      }
+    }
+
+    .tearing-active {
+      animation: paperTearAway 0.65s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
+      pointer-events: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="album-nav">
+    <a href="index.html">← Back to Heritage Explorer</a>
+    <div class="user-pill">
+      Explorer: <strong id="journey-user-email">Explorer</strong>
+    </div>
+  </nav>
+
+  <div class="viewport">
+    
+    <div class="header-text">
+      <span>Living Antique Memoirs</span>
+      <h1>The Bharat Heritage Scrapbook</h1>
+      <p>Hand-crafted travel chronicle with deckled pages and vintage keepsakes.</p>
+    </div>
+
+    <!-- ACTION BAR -->
+    <div class="album-action-bar" id="album-action-bar">
+      <button class="btn-close-book" id="btn-close-album" type="button">
+        <span>📕 Close Scrapbook</span>
+      </button>
+      <span style="font-size: 0.82rem; color: #a1a1aa; letter-spacing: 1px;">
+        <strong id="stat-count" style="color: var(--gold-primary);">0</strong> Sthals Preserved
+      </span>
+    </div>
+
+    <!-- BOOK STAGE -->
+    <div class="book-stage">
+      
+      <!-- 1. CLOSED BOOK VIEW -->
+      <div class="closed-book-card" id="book-front-cover">
+        <div class="corner-brass corner-tl"></div>
+        <div class="corner-brass corner-tr"></div>
+        <div class="corner-brass corner-bl"></div>
+        <div class="corner-brass corner-br"></div>
+
+        <div class="outer-leather-strap">
+          <div class="outer-buckle"></div>
+        </div>
+
+        <div class="outer-cover-emblem">🏛️</div>
+        <div class="outer-title">BHARAT VIRASAT</div>
+        <div class="outer-sub">Sacred Explorer's Scrapbook</div>
+
+        <div class="open-cue-badge">
+          <span>🗝️ Click to Open Scrapbook</span>
+        </div>
+      </div>
+
+      <!-- 2. OPEN DUAL PARCHMENT SPREAD -->
+      <div class="open-spread-card" id="open-spread-card">
+        <div class="open-spread-body">
+          
+          <!-- FOLIO I (LEFT PAGE) -->
+          <div class="leaf-page">
+            <div class="page-ephemera-header">
+              <span>Folio I • Chronicle Mounts</span>
+              <span>ASI Registered</span>
+            </div>
+
+            <div class="vintage-pocket-mount">
+              <div class="pocket-strap">
+                <div class="pocket-strap-buckle"></div>
+              </div>
+
+              <div class="add-memory-card-btn" id="open-add-slot-btn">
+                <div class="plus-circle">+</div>
+                <div class="add-btn-title">Mount New Travel Memory</div>
+                <div class="add-btn-sub">Attach photo, reflections &amp; travel stamp</div>
+              </div>
+            </div>
+
+            <div class="memories-mosaic-grid" id="left-polaroids-container"></div>
+          </div>
+
+          <!-- FOLIO II (RIGHT PAGE) -->
+          <div class="leaf-page">
+            <div class="page-ephemera-header">
+              <span>Folio II • Archaeological Memoirs</span>
+              <span>Subcontinent Heritage</span>
+            </div>
+
+            <div class="memories-mosaic-grid" id="right-polaroids-container"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MODAL: ADD NEW MEMORY -->
+  <div class="modal-backdrop" id="add-modal-backdrop"></div>
+  <div class="modal-dialog" id="add-modal">
+    <div class="modal-header">
+      <h3>Paste Memory into Scrapbook</h3>
+      <button class="btn-close" id="close-add-btn">&times;</button>
+    </div>
+    <form id="travel-form">
+      <div class="form-group">
+        <label for="site-name-input">Monument / Sthal Name</label>
+        <input type="text" id="site-name-input" placeholder="e.g. Shaniwar Wada, Hampi" required>
+      </div>
+
+      <div class="form-group">
+        <label for="state-input">State / Region</label>
+        <input type="text" id="state-input" placeholder="e.g. Maharashtra" required>
+      </div>
+
+      <div class="form-group">
+        <label for="visit-date-input">Date of Exploration</label>
+        <input type="date" id="visit-date-input" required>
+      </div>
+
+      <div class="form-group">
+        <label for="site-notes-input">Your Written Story / Note</label>
+        <textarea id="site-notes-input" rows="3" placeholder="Write like a diary entry: what did you feel, ancient stone masonry, evening prayers..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Snap Photo (Auto-Formatted to Polaroid)</label>
+        <input type="file" id="site-photo-input" accept="image/*">
+        <div class="image-preview-box" id="preview-box">
+          <img id="preview-img" alt="Preview">
+        </div>
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn-submit-memory">
+        Pin to Album Page
+      </button>
+    </form>
+  </div>
+
+  <!-- MODAL: FLIP & READ MEMORY DIARY -->
+  <div class="modal-backdrop" id="inspect-modal-backdrop"></div>
+  <div class="modal-dialog inspect-dialog" id="inspect-modal">
+    <div class="modal-header">
+      <h3 id="inspect-title" style="font-family: 'Cinzel', serif;">Monument</h3>
+      <button class="btn-close" id="close-inspect-btn" style="color: #78350f;">&times;</button>
+    </div>
+
+    <div class="inspect-polaroid-frame">
+      <img id="inspect-img" src="" alt="Polaroid Memory">
+    </div>
+
+    <div style="font-family: 'IM Fell English', serif; font-size: 0.85rem; color: #78350f; font-weight: 700;" id="inspect-meta">
+      📍 Location • 🗓️ Date
+    </div>
+
+    <div class="handwritten-notes-area" id="inspect-notes">
+      "Reflection notes appear here..."
+    </div>
+
+    <button type="button" class="btn-delete-memory" id="btn-delete-node">
+      Tear Leaf from Album
+    </button>
+  </div>
+
+  <!-- FIREBASE SCRIPTS -->
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCmceoAJeThpx5EA3L8HIlPs0hgq2ufADg",
+      authDomain: "bharat-roots-app.firebaseapp.com",
+      projectId: "bharat-roots-app",
+      storageBucket: "bharat-roots-app.firebasestorage.app",
+      messagingSenderId: "316351733052",
+      appId: "1:316351733052:web:1445e02173265ebae75239"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUserId = null;
+    let selectedBase64Image = "";
+    let activeInspectDocId = null;
+    let loadedNodes = {};
+
+    // OPEN / CLOSE TOGGLES
+    const bookCover = document.getElementById("book-front-cover");
+    const openSpreadCard = document.getElementById("open-spread-card");
+    const btnCloseAlbum = document.getElementById("btn-close-album");
+    const actionBar = document.getElementById("album-action-bar");
+
+    bookCover.addEventListener("click", () => {
+      bookCover.style.display = "none";
+      openSpreadCard.style.display = "block";
+      actionBar.classList.add("visible");
+    });
+
+    btnCloseAlbum.addEventListener("click", () => {
+      openSpreadCard.style.display = "none";
+      actionBar.classList.remove("visible");
+      bookCover.style.display = "flex";
+    });
+
+    // MODAL TOGGLES
+    const addBackdrop = document.getElementById("add-modal-backdrop");
+    const addDialog = document.getElementById("add-modal");
+    const inspectBackdrop = document.getElementById("inspect-modal-backdrop");
+    const inspectDialog = document.getElementById("inspect-modal");
+
+    document.getElementById("open-add-slot-btn").addEventListener("click", () => {
+      addBackdrop.style.display = "block";
+      addDialog.style.display = "block";
+    });
+
+    function closeAdd() {
+      addBackdrop.style.display = "none";
+      addDialog.style.display = "none";
+    }
+    document.getElementById("close-add-btn").addEventListener("click", closeAdd);
+    addBackdrop.addEventListener("click", closeAdd);
+
+    function closeInspect() {
+      inspectBackdrop.style.display = "none";
+      inspectDialog.style.display = "none";
+      activeInspectDocId = null;
+    }
+    document.getElementById("close-inspect-btn").addEventListener("click", closeInspect);
+    inspectBackdrop.addEventListener("click", closeInspect);
+
+    // AUTH GUARD
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        currentUserId = user.uid;
+        document.getElementById("journey-user-email").textContent = user.displayName || user.email.split("@")[0];
+        loadAlbumMemories(user.uid);
+      } else {
+        alert("Please sign in first to access your private heritage album.");
+        window.location.href = "index.html";
+      }
+    });
+
+    // IMAGE COMPRESSION TO POLAROID
+    document.getElementById("site-photo-input").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const dim = 400;
+          canvas.width = dim;
+          canvas.height = dim;
+
+          const scale = Math.max(dim / img.width, dim / img.height);
+          const x = (dim / 2) - (img.width / 2) * scale;
+          const y = (dim / 2) - (img.height / 2) * scale;
+          ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+          selectedBase64Image = canvas.toDataURL("image/jpeg", 0.75);
+          document.getElementById("preview-img").src = selectedBase64Image;
+          document.getElementById("preview-box").style.display = "block";
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // SUBMIT & PIN TO SCRAPBOOK
+    document.getElementById("travel-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!currentUserId) return;
+
+      const siteName = document.getElementById("site-name-input").value.trim();
+      const state = document.getElementById("state-input").value.trim();
+      const visitDate = document.getElementById("visit-date-input").value;
+      const notes = document.getElementById("site-notes-input").value.trim();
+
+      const submitBtn = document.getElementById("submit-btn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Mounting into Scrapbook...";
+
+      try {
+        await db.collection("users").doc(currentUserId).collection("travelTree").add({
+          siteName: siteName,
+          state: state,
+          visitDate: visitDate,
+          notes: notes,
+          imageBase64: selectedBase64Image || null,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        document.getElementById("travel-form").reset();
+        selectedBase64Image = "";
+        document.getElementById("preview-box").style.display = "none";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Pin to Album Page";
+        closeAdd();
+
+        loadAlbumMemories(currentUserId);
+      } catch (err) {
+        alert("Error saving: " + err.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Pin to Album Page";
+      }
+    });
+
+    // LOAD & RENDER SPREAD
+    async function loadAlbumMemories(uid) {
+      try {
+        const snap = await db.collection("users").doc(uid).collection("travelTree")
+          .orderBy("visitDate", "desc")
+          .get();
+
+        const leftContainer = document.getElementById("left-polaroids-container");
+        const rightContainer = document.getElementById("right-polaroids-container");
+        leftContainer.innerHTML = '';
+        rightContainer.innerHTML = '';
+        loadedNodes = {};
+
+        document.getElementById("stat-count").textContent = snap.size;
+
+        if (snap.empty) return;
+
+        let index = 0;
+        snap.forEach(doc => {
+          const item = doc.data();
+          item.id = doc.id;
+          loadedNodes[doc.id] = item;
+
+          const rotation = (index % 3 === 0) ? '-2.5deg' : (index % 2 === 0 ? '2deg' : '-1.2deg');
+
+          const polaroid = document.createElement("div");
+          polaroid.className = "vintage-photo-mount";
+          polaroid.style.transform = `rotate(${rotation})`;
+          polaroid.onclick = () => openInspect(item.id);
+
+          polaroid.innerHTML = `
+            <div class="photo-crop-box">
+              ${item.imageBase64 
+                ? `<img src="${item.imageBase64}" alt="${escapeHtml(item.siteName)}">` 
+                : `<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem; background:#382717;">🏛️</div>`}
+            </div>
+            <div class="photo-handwritten-title">${escapeHtml(item.siteName)}</div>
+            <div class="photo-date-badge">${item.visitDate || 'Explored'} • ${escapeHtml(item.state || 'India')}</div>
+          `;
+
+          if (index % 2 === 0) {
+            leftContainer.appendChild(polaroid);
+          } else {
+            rightContainer.appendChild(polaroid);
+          }
+          index++;
+        });
+
+      } catch (err) {
+        console.error("Error loading album:", err);
+      }
+    }
+
+    // INSPECT (FLIP PHOTO & READ DIARY)
+    function openInspect(docId) {
+      const item = loadedNodes[docId];
+      if (!item) return;
+
+      activeInspectDocId = docId;
+      document.getElementById("inspect-title").textContent = item.siteName;
+      document.getElementById("inspect-meta").textContent = `📍 ${item.state || 'India'} • 🗓️ Visited: ${item.visitDate || 'Memoir'}`;
+      document.getElementById("inspect-notes").textContent = item.notes || "No handwritten story added for this trip.";
+
+      const img = document.getElementById("inspect-img");
+      if (item.imageBase64) {
+        img.src = item.imageBase64;
+        img.style.display = "block";
+      } else {
+        img.style.display = "none";
+      }
+
+      inspectBackdrop.style.display = "block";
+      inspectDialog.style.display = "block";
+    }
+
+    // ANIMATED PAPER TEAR & DELETE FROM SCRAPBOOK
+    document.getElementById("btn-delete-node").addEventListener("click", async () => {
+      if (!activeInspectDocId) return;
+
+      const userConfirm = confirm("Are you sure you want to tear this leaf from the Sacred Scrapbook?");
+      if (!userConfirm) return;
+
+      const deleteBtn = document.getElementById("btn-delete-node");
+      deleteBtn.disabled = true;
+      deleteBtn.textContent = "Tearing leaf...";
+
+      inspectDialog.classList.add("tearing-active");
+
+      // Procedural Web Audio paper rip
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch (e) {}
+
+      setTimeout(async () => {
+        try {
+          await db.collection("users").doc(currentUserId).collection("travelTree").doc(activeInspectDocId).delete();
+          
+          inspectDialog.classList.remove("tearing-active");
+          deleteBtn.disabled = false;
+          deleteBtn.textContent = "Tear Leaf from Album";
+          
+          closeInspect();
+          loadAlbumMemories(currentUserId);
+        } catch (err) {
+          alert("Error while removing: " + err.message);
+          inspectDialog.classList.remove("tearing-active");
+          deleteBtn.disabled = false;
+          deleteBtn.textContent = "Tear Leaf from Album";
+        }
+      }, 620);
+    });
+
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+  </script>
+</body>
+</html>

@@ -17,8 +17,6 @@ const HERITAGE_SITES = [
     builtBy: "Emperor Shah Jahan",
     architecturalStyle: "Indo-Islamic & Mughal Architecture",
     unescoStatus: "UNESCO World Heritage Site (1983)",
-    rating: 4.9,
-    reviewsCount: 145000,
     coverImage: "../images/taj mahal.jpg",
     gallery: [
       "../images/taj mahal.jpg",
@@ -49,8 +47,6 @@ const HERITAGE_SITES = [
     builtBy: "Harihara I, Bukka Raya I & King Krishnadevaraya",
     architecturalStyle: "Dravidian & Vijayanagara Architecture",
     unescoStatus: "UNESCO World Heritage Site (1986)",
-    rating: 4.8,
-    reviewsCount: 42000,
     coverImage: "../images/Group of Monuments at Hampi.jpg",
     gallery: [
       "../images/Group of Monuments at Hampi.jpg",
@@ -81,8 +77,6 @@ const HERITAGE_SITES = [
     builtBy: "King Narasimhadeva I",
     architecturalStyle: "Kalinga Architectural Style",
     unescoStatus: "UNESCO World Heritage Site (1984)",
-    rating: 4.8,
-    reviewsCount: 38000,
     coverImage: "../images/Sun Temple, Konark.jpg",
     gallery: [
       "../images/Sun Temple, Konark.jpg",
@@ -113,8 +107,6 @@ const HERITAGE_SITES = [
     builtBy: "Satavahana, Vakataka & Rashtrakuta Dynasties",
     architecturalStyle: "Ancient Indian Rock-Cut Architecture",
     unescoStatus: "UNESCO World Heritage Site (1983)",
-    rating: 4.9,
-    reviewsCount: 56000,
     coverImage: "../images/Ajanta & Ellora Caves.jpg",
     gallery: [
       "../images/Ajanta & Ellora Caves.jpg",
@@ -145,8 +137,6 @@ const HERITAGE_SITES = [
     builtBy: "Emperor Raja Raja Chola I",
     architecturalStyle: "Dravidian Chola Architecture",
     unescoStatus: "UNESCO World Heritage Site (1987)",
-    rating: 4.9,
-    reviewsCount: 62000,
     coverImage: "../images/Brihadisvara Temple (Big Temple).jpg",
     gallery: [
       "../images/Brihadisvara Temple (Big Temple).jpg",
@@ -177,8 +167,6 @@ const HERITAGE_SITES = [
     builtBy: "Chandela Kings (Yashovarman & Dhanga)",
     architecturalStyle: "Nagara (Kandariya Style) Architecture",
     unescoStatus: "UNESCO World Heritage Site (1986)",
-    rating: 4.7,
-    reviewsCount: 31000,
     coverImage: "../images/Khajuraho Group of Monuments.jpg",
     gallery: [
       "../images/Khajuraho Group of Monuments.jpg",
@@ -209,8 +197,6 @@ const HERITAGE_SITES = [
     builtBy: "Qutb-ud-din Aibak & Shams-ud-din Iltutmish",
     architecturalStyle: "Indo-Islamic Architecture",
     unescoStatus: "UNESCO World Heritage Site (1993)",
-    rating: 4.7,
-    reviewsCount: 98000,
     coverImage: "../images/Qutub Minar & Its Monuments.jpg",
     gallery: [
       "../images/Qutub Minar & Its Monuments.jpg",
@@ -241,8 +227,6 @@ const HERITAGE_SITES = [
     builtBy: "Raja Man Singh I",
     architecturalStyle: "Rajput & Mughal Fusion Architecture",
     unescoStatus: "UNESCO World Heritage Site (2013)",
-    rating: 4.8,
-    reviewsCount: 110000,
     coverImage: "../images/Amer Fort & Hill Forts of Rajasthan.jpg",
     gallery: [
       "../images/Amer Fort & Hill Forts of Rajasthan.jpg",
@@ -273,8 +257,6 @@ const HERITAGE_SITES = [
     builtBy: "Emperor Kumaragupta I (Gupta Empire)",
     architecturalStyle: "Ancient Buddhist Monastic Architecture",
     unescoStatus: "UNESCO World Heritage Site (2016)",
-    rating: 4.7,
-    reviewsCount: 22000,
     coverImage: "../images/Archaeological Site of Nalanda Mahavihara.jpg",
     gallery: [
       "../images/Archaeological Site of Nalanda Mahavihara.jpg",
@@ -305,8 +287,6 @@ const HERITAGE_SITES = [
     builtBy: "Queen Udayamati in memory of King Bhima I",
     architecturalStyle: "Maru-Gurjara Architectural Style",
     unescoStatus: "UNESCO World Heritage Site (2014)",
-    rating: 4.8,
-    reviewsCount: 29000,
     coverImage: "../images/Rani ki Vav (The Queen's Stepwell).jpg",
     gallery: [
       "../images/Rani ki Vav (The Queen's Stepwell).jpg"
@@ -336,8 +316,6 @@ const HERITAGE_SITES = [
     builtBy: "King Tirumala Nayaka & Pandyan Rulers",
     architecturalStyle: "Dravidian Temple Architecture",
     unescoStatus: "Nominated UNESCO Tentative List",
-    rating: 4.9,
-    reviewsCount: 95000,
     coverImage: "../images/Meenakshi Amman Temple.jpg",
     gallery: [
       "../images/Meenakshi Amman Temple.jpg"
@@ -367,8 +345,6 @@ const HERITAGE_SITES = [
     builtBy: "Preservation initiated by Lady Curzon",
     architecturalStyle: "Brahmaputra Floodplain Ecosystem & Ahom Folk Culture",
     unescoStatus: "UNESCO World Heritage Site (1985)",
-    rating: 4.8,
-    reviewsCount: 34000,
     coverImage: "../images/Kaziranga Cultural & Eco Heritage.jpg",
     gallery: [
       "../images/Kaziranga Cultural & Eco Heritage.jpg"
