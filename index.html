@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>BharatVirasat - AI Heritage Explorer</title>
-  <meta name="description" content="Discover the rich culture, historic temples, and monuments of India with Bharat Virasat.">
+  <title>BharatVirasat - AI Heritage Explorer &amp; Living 3D Archive</title>
+  <meta name="description" content="Discover India's living cultural legends, 3D monument decks, 80-Day Odyssey itineraries, AI architectural scanner, Dadi folklore, and RakshaSetu safety grid.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles-premium.css">
   <link rel="stylesheet" href="heritage-theme.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22>🏛️</text></svg>">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8116673520430387"
      crossorigin="anonymous"></script>
 </head>
 <body>
+
+<!-- GLOBAL TOAST NOTIFICATION STACK -->
+<div id="toast-container" class="toast-container" aria-live="polite"></div>
 
 <!-- AMBIENT HERITAGE CANVAS BACKGROUND -->
 <canvas id="ambient-canvas"></canvas>
@@ -23,13 +27,13 @@
 <!-- HEADER -->
 <header>
   <div class="header-left">
-    <div class="logo">
+    <a href="index.html" class="logo" aria-label="BharatVirasat Home">
       <span>🏛️</span>
       <div class="logo-text">
         <div class="brand">BHARAT VIRASAT</div>
         <div class="tagline">PREMIUM ARCHIVE</div>
       </div>
-    </div>
+    </a>
   </div>
   <div class="header-controls">
     <div class="language-tools">
@@ -43,22 +47,111 @@
     <div id="auth-header-slot" style="display: inline-flex; align-items: center;">
       <button id="open-auth-btn" class="header-action-btn" type="button">🔑 Sign In</button>
       <div id="user-pill" style="display: none; align-items: center; gap: 8px;">
-  <span id="user-display-email" style="font-size: 0.85rem; font-weight: 600; color: #d4af37;"></span>
-  <a href="my-journey.html" class="header-action-btn" style="text-decoration: none; border-color: #d4af37; color: #d4af37; display: inline-flex; align-items: center; gap: 4px;">🌿 Travel Tree</a>
-  <button id="logout-btn" class="header-action-btn" style="border-color: #ef4444; color: #ef4444;" type="button">Logout</button>
-</div>
+        <span id="user-display-email" style="font-size: 0.85rem; font-weight: 600; color: #d4af37;"></span>
+        <a href="my-journey.html" class="header-action-btn" style="text-decoration: none; border-color: #d4af37; color: #d4af37; display: inline-flex; align-items: center; gap: 4px;">🌿 Travel Tree</a>
+        <button id="logout-btn" class="header-action-btn" style="border-color: #ef4444; color: #ef4444;" type="button">Logout</button>
+      </div>
     </div>
 
-    <button id="ai-chat-btn" class="header-action-btn">💬 AI Chat</button>
-    <button id="saved-btn" class="header-action-btn">❤️ Saved</button>
-    <button class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+    <a href="#rakshasetu" class="header-action-btn" style="text-decoration: none; border-color: #ef4444; color: #ef4444; display: inline-flex; align-items: center; gap: 4px; font-weight: 700;">🛡️ SOS Safety</a>
+    <button id="ai-chat-btn" class="header-action-btn" type="button">💬 AI Chat</button>
+    <button id="saved-btn" class="header-action-btn" type="button">❤️ Saved</button>
+    <button class="dark-toggle" aria-label="Toggle dark mode" type="button">🌙</button>
+
+    <!-- MOBILE MENU BURGER BUTTON -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span class="burger-bar"></span>
+      <span class="burger-bar"></span>
+      <span class="burger-bar"></span>
+    </button>
   </div>
 </header>
 
+<!-- MOBILE NAVIGATION DRAWER & BACKDROP -->
+<div id="mobile-nav-backdrop" class="mobile-nav-backdrop"></div>
+<aside id="mobile-nav-drawer" class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Navigation Menu">
+  <div class="mobile-nav-header">
+    <div class="mobile-nav-brand">
+      <span>🏛️</span>
+      <strong>BHARAT VIRASAT</strong>
+    </div>
+    <button id="mobile-nav-close" class="mobile-nav-close" type="button" aria-label="Close menu">&times;</button>
+  </div>
+
+  <div class="mobile-nav-body">
+    <!-- User / Auth Slot for Mobile -->
+    <div class="mobile-auth-slot">
+      <div id="mobile-user-info" style="display: none; padding: 10px; background: rgba(212,175,55,0.1); border-radius: 8px; margin-bottom: 12px;">
+        <span style="font-size: 0.85rem; color: #cbd5e1;">Logged in as:</span>
+        <strong id="mobile-user-email" style="display: block; color: #d4af37; font-size: 0.95rem;"></strong>
+      </div>
+      <button id="mobile-auth-btn" class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 10px;" type="button">🔑 Sign In / Sign Up</button>
+      <a href="my-journey.html" class="btn btn-secondary" style="width: 100%; justify-content: center; text-decoration: none; display: flex; align-items: center; gap: 6px;">🌿 Sacred Scrapbook Album</a>
+    </div>
+
+    <!-- Quick Tools -->
+    <div class="mobile-nav-section-title">⚡ Interactive Features</div>
+    <div class="mobile-quick-links">
+      <button type="button" class="mobile-feature-chip" onclick="closeMobileMenu(); window.openDrishtiScanner && window.openDrishtiScanner();">
+        <span>📷</span> Drishti Scanner
+      </button>
+      <button type="button" class="mobile-feature-chip" onclick="closeMobileMenu(); window.openDadiStoryteller && window.openDadiStoryteller();">
+        <span>👵</span> Dadi's Folklore
+      </button>
+      <button type="button" class="mobile-feature-chip" onclick="closeMobileMenu(); typeof openGeminiDrawer === 'function' && openGeminiDrawer();">
+        <span>💬</span> AI Guide Chat
+      </button>
+      <button type="button" class="mobile-feature-chip" onclick="closeMobileMenu(); (window.openEightyDaysPlanner && window.openEightyDaysPlanner()) || document.getElementById('eighty-days-section')?.scrollIntoView({behavior:'smooth'});">
+        <span>🗺️</span> 80-Day Odyssey
+      </button>
+    </div>
+
+    <!-- Section Jumps -->
+    <div class="mobile-nav-section-title">🧭 Navigation Chapters</div>
+    <ul class="mobile-nav-list">
+      <li><a href="#journey" onclick="closeMobileMenu()">🏛️ Grand Heritage Journey</a></li>
+      <li><a href="#eighty-days-section" onclick="closeMobileMenu()">🗺️ 80-Day Odyssey Explorer</a></li>
+      <li><a href="#discover" onclick="closeMobileMenu()">🎯 3D Curated Decks</a></li>
+      <li><a href="#state-heritage-guide" onclick="closeMobileMenu()">🧭 State Heritage Guides</a></li>
+      <li><a href="#rakshasetu" onclick="closeMobileMenu()" style="color: #ef4444; font-weight: 700;">🛡️ RakshaSetu Tourist Safety &amp; SOS</a></li>
+      <li><a href="#heritage-test" onclick="closeMobileMenu()">🏆 Heritage Challenge Quiz</a></li>
+      <li><a href="#about-creators" onclick="closeMobileMenu()">👥 Team CODE:BLACK</a></li>
+      <li><a href="legal.html" style="color: #94a3b8;">📜 Legal &amp; Privacy Policy</a></li>
+    </ul>
+
+    <!-- Emergency Helplines -->
+    <div class="mobile-nav-section-title">📞 24x7 Emergency One-Touch</div>
+    <div class="mobile-helplines-grid">
+      <a href="tel:112" class="mobile-helpline-pill" style="border-color: #ef4444;">
+        <strong>112</strong>
+        <small>National ERSS</small>
+      </a>
+      <a href="tel:1363" class="mobile-helpline-pill" style="border-color: #38bdf8;">
+        <strong>1363</strong>
+        <small>Tourist Helpline</small>
+      </a>
+      <a href="tel:1091" class="mobile-helpline-pill" style="border-color: #ec4899;">
+        <strong>1091</strong>
+        <small>Women Safety</small>
+      </a>
+      <a href="tel:108" class="mobile-helpline-pill" style="border-color: #10b981;">
+        <strong>108</strong>
+        <small>Ambulance</small>
+      </a>
+    </div>
+
+    <div style="margin-top: 1.5rem; text-align: center;">
+      <a href="mailto:rsgaming8090@gmail.com" style="color: #d4af37; font-size: 0.85rem; text-decoration: none;">✉️ rsgaming8090@gmail.com</a>
+    </div>
+  </div>
+</aside>
+
 <nav class="chapter-nav" aria-label="Explore BharatVirasat">
   <a href="#journey" class="active">Journey</a>
+  <a href="#eighty-days-section">🗺️ 80-Day Odyssey</a>
   <a href="#discover">Curated Decks</a>
   <a href="#state-heritage-guide">State Guides</a>
+  <a href="#rakshasetu">🛡️ RakshaSetu</a>
   <a href="#heritage-test">Quiz</a>
   <a href="#about-creators">About</a>
 </nav>
@@ -73,7 +166,10 @@
     </h1>
     <p>AI-guided cultural exploration of timeless citadels, rock-cut marvels, and living monuments across the subcontinent.</p>
     <div class="hero-buttons">
-      <button class="btn btn-primary" id="start-journey-btn">✨ Start Curated Journey</button>
+      <button class="btn btn-primary" id="start-journey-btn">✨ 3D Curated Decks</button>
+      <button class="btn btn-primary" style="background: linear-gradient(135deg, #d4af37, #b56b35);" onclick="(window.openEightyDaysPlanner && window.openEightyDaysPlanner()) || document.getElementById('eighty-days-section')?.scrollIntoView({behavior:'smooth'})">🗺️ 80-Day Odyssey</button>
+      <button class="btn btn-secondary" onclick="window.openDrishtiScanner && window.openDrishtiScanner()">📷 Scan Monument</button>
+      <button class="btn btn-secondary" onclick="window.openDadiStoryteller && window.openDadiStoryteller()">👵 Dadi's Tales</button>
       <button class="btn btn-secondary" id="watch-demo-btn">🎬 Ask AI Guide</button>
     </div>
   </div>
@@ -86,19 +182,34 @@
     <h2>Choose your next adventure</h2>
   </div>
   <div class="dashboard-actions">
-    <a class="dashboard-action" href="#personalization">
-      <span class="dashboard-icon">01</span>
-      <span><strong>Personalize</strong><small>Tailor your visit time & region</small></span>
+    <a class="dashboard-action" href="#eighty-days-section">
+      <span class="dashboard-icon" style="color: #d4af37; border-color: rgba(212,175,55,0.4);">01</span>
+      <span><strong>80-Day Odyssey</strong><small>Traverse 80 heritage spots across Bharat</small></span>
+      <span class="dashboard-arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="dashboard-action" href="javascript:void(0)" onclick="window.openDrishtiScanner && window.openDrishtiScanner()">
+      <span class="dashboard-icon" style="color: #e67e22; border-color: rgba(230,126,34,0.4);">02</span>
+      <span><strong>Drishti Scanner</strong><small>Instant AI photo monument identification</small></span>
+      <span class="dashboard-arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="dashboard-action" href="javascript:void(0)" onclick="window.openDadiStoryteller && window.openDadiStoryteller()">
+      <span class="dashboard-icon" style="color: #f59e0b; border-color: rgba(245,158,11,0.4);">03</span>
+      <span><strong>Dadi's Voice</strong><small>Warm grandmother storytelling folklore</small></span>
       <span class="dashboard-arrow" aria-hidden="true">→</span>
     </a>
     <a class="dashboard-action" href="#discover">
-      <span class="dashboard-icon">02</span>
+      <span class="dashboard-icon">04</span>
       <span><strong>3D Decks</strong><small>Interactive 3D coverflow showcase</small></span>
       <span class="dashboard-arrow" aria-hidden="true">→</span>
     </a>
     <a class="dashboard-action" href="#state-heritage-guide">
-      <span class="dashboard-icon">03</span>
+      <span class="dashboard-icon">05</span>
       <span><strong>State Guides</strong><small>Verified route & ticketing plans</small></span>
+      <span class="dashboard-arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="dashboard-action" href="#rakshasetu">
+      <span class="dashboard-icon" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.45);">06</span>
+      <span><strong>RakshaSetu</strong><small>Tourist safety, 1-click SOS & live grid</small></span>
       <span class="dashboard-arrow" aria-hidden="true">→</span>
     </a>
   </div>
@@ -195,7 +306,7 @@
 
   <!-- MULTI-DECK 3D COVERFLOW SECTION -->
   <main>
-    <section class="marvels-section reveal">
+    <section class="marvels-section reveal" id="discover">
       <div class="section-title">
         <h2>Curated Heritage Decks in 3D</h2>
         <p>Swipe or drag cards horizontally to inspect architectural marvels in authentic 3D coverflow</p>
@@ -207,6 +318,9 @@
     </section>
   </main>
 
+  <!-- AROUND BHARAT IN 80 DAYS EXPEDITION PLANNER -->
+  <section class="planner-section is-visible" id="eighty-days-section" aria-label="Around Bharat in 80 Days Planner"></section>
+
   <!-- STATE HERITAGE GUIDE -->
   <section class="state-guide reveal" id="state-heritage-guide">
     <div class="section-title">
@@ -216,6 +330,135 @@
     <label for="state-guide-select" style="font-weight: 700; display: block; margin-bottom: 0.5rem;">Choose a State / UT</label>
     <select id="state-guide-select" aria-label="Choose a state heritage guide"></select>
     <div id="state-guide-results"></div>
+  </section>
+
+  <!-- RAKSHASETU — LOCATION TOOLS & EMERGENCY CONTACT SHORTCUTS -->
+  <section class="rakshasetu-section reveal" id="rakshasetu" aria-label="RakshaSetu Tourist Safety Grid">
+    <div class="section-title">
+      <div class="raksha-header-badge">🛡️ TRAVEL LOCATION &amp; CONTACT TOOLS</div>
+      <h2>RakshaSetu — Location &amp; Emergency Contacts</h2>
+      <p>View your device location and prepare links to share it. This page does not contact emergency services or verify nearby facilities; call the appropriate local service directly in an emergency.</p>
+    </div>
+
+    <div class="raksha-grid-container">
+      <!-- Left Column: Device Location -->
+      <div class="raksha-card">
+        <div class="raksha-card-header">
+          <div class="raksha-card-title">
+            <span>🗺️ Your Location</span>
+          </div>
+        </div>
+
+        <div class="raksha-map-legend">
+          <span>🔵 <strong>Your device location only</strong></span>
+        </div>
+        <p>Nearby services and safety conditions are not shown or verified on this map.</p>
+
+        <div class="raksha-map-wrapper">
+          <div id="raksha-map"></div>
+        </div>
+
+        <div class="raksha-map-controls-bar">
+          <div id="raksha-telemetry-status">
+            Location permission has not been checked yet.
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" id="raksha-recenter-btn" class="raksha-btn-mini">📍 Recenter GPS</button>
+            <button type="button" id="raksha-copy-coords-btn" class="raksha-btn-mini">📋 Copy Coords</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Location Sharing & Safety Tools -->
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- Prepare emergency contact links -->
+        <div class="raksha-card raksha-sos-card">
+          <div class="raksha-card-header">
+            <div class="raksha-card-title">
+              <span>🚨 Prepare Location to Share</span>
+            </div>
+            <span style="font-size: 0.75rem; color: #ef4444; font-weight: 700; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 6px;">NO AUTOMATIC ALERT</span>
+          </div>
+
+          <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.75rem;">
+            Gets your current location and prepares call, SMS, and WhatsApp links. Nothing is sent until you choose an option, and this tool does not notify 112 or your contacts automatically.
+          </p>
+
+          <div class="raksha-telemetry-badge">
+            <div style="font-weight: 600; margin-bottom: 4px; color: #f8fafc;">📍 Device Location (with your permission):</div>
+            <div class="raksha-telemetry-row">
+              <span>Latitude: <strong id="raksha-lat-val">Unavailable</strong></span>
+              <span>Longitude: <strong id="raksha-lon-val">Unavailable</strong></span>
+            </div>
+            <div class="raksha-telemetry-row" style="margin-top: 2px;">
+              <span>Accuracy: <strong id="raksha-acc-val">Unavailable</strong></span>
+              <span>Sharing: <strong>Only when you choose an option</strong></span>
+            </div>
+          </div>
+
+          <button type="button" id="raksha-sos-trigger-btn" class="raksha-sos-button" aria-label="Prepare location sharing options">
+            <span>📍 PREPARE LOCATION OPTIONS</span>
+          </button>
+
+          <!-- Result output panel -->
+          <div id="raksha-sos-result-box" class="raksha-status-result-box">
+            <div id="raksha-sos-output-details"></div>
+          </div>
+        </div>
+
+        <!-- Tactical Tourist Deterrents Card -->
+        <div class="raksha-card">
+          <div class="raksha-card-header">
+            <div class="raksha-card-title">
+              <span>⚡ Tactical Safety Tools</span>
+            </div>
+            <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 600;">Active Situational Control</span>
+          </div>
+
+          <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 0.5rem;">
+            Tools designed to defuse threatening situations or attract immediate public attention.
+          </p>
+
+          <div class="raksha-tools-grid">
+            <button type="button" id="raksha-fakecall-open-btn" class="raksha-tool-btn raksha-fakecall-btn">
+              <span style="font-size: 20px;">📞</span>
+              <span>Tactical Fake Call</span>
+              <small style="font-size: 0.7rem; opacity: 0.85;">Defuse Awkward Situations</small>
+            </button>
+            <button type="button" id="raksha-siren-toggle-btn" class="raksha-tool-btn raksha-siren-btn">
+              <span style="font-size: 20px;">🔊</span>
+              <span>Distress Siren</span>
+              <small style="font-size: 0.7rem; opacity: 0.85;">High-Decibel Deterrent</small>
+            </button>
+          </div>
+
+          <!-- Rapid Helplines Dial -->
+          <div style="margin-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.5rem;">
+              📞 One-Touch Emergency Helplines (India):
+            </div>
+            <div class="raksha-helpline-grid">
+              <a href="tel:112" class="raksha-helpline-pill" title="National Emergency Response">
+                <span class="raksha-helpline-number">112</span>
+                <span class="raksha-helpline-label">National ERSS (All-In-One)</span>
+              </a>
+              <a href="tel:1363" class="raksha-helpline-pill" title="Tourist Helpline">
+                <span class="raksha-helpline-number">1363</span>
+                <span class="raksha-helpline-label">Incredible India Tourist Line</span>
+              </a>
+              <a href="tel:1091" class="raksha-helpline-pill" title="Women Safety">
+                <span class="raksha-helpline-number">1091</span>
+                <span class="raksha-helpline-label">Women Safety Support</span>
+              </a>
+              <a href="tel:108" class="raksha-helpline-pill" title="Medical Ambulance">
+                <span class="raksha-helpline-number">108</span>
+                <span class="raksha-helpline-label">Ambulance &amp; Medical</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- HERITAGE TEST SLIDE -->
@@ -259,12 +502,59 @@
 </div>
 
 <!-- FOOTER -->
-<footer>
-  <p>🏛️ BharatVirasat Premium — Celebrating Indian Heritage Through Technology 🇮🇳</p>
-  <p>Powered by Google Gemini AI | Multilingual Support | 3D Interactive Galleries</p>
-  <p style="font-size: 0.85rem; opacity: 0.75; margin-top: 0.5rem;">Created with passion during Smart India Hackathon</p>
-  <p class="legal-links"><a href="legal.html#privacy">Privacy Policy</a> · <a href="legal.html#terms">Terms</a> · <a href="legal.html#cookies">Cookies</a></p>
-  <p class="footer-contact">Contact: <a href="mailto:rsgaming8090@gmail.com">rsgaming8090@gmail.com</a></p>
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <span>🏛️</span>
+        <strong style="font-family: 'Cinzel', serif; letter-spacing: 1.5px; font-size: 1.1rem; color: #fff;">BHARAT VIRASAT</strong>
+      </div>
+      <p style="font-size: 0.88rem; color: #94a3b8; line-height: 1.6; margin: 0.75rem 0 1rem;">
+        An immersive, intelligent cultural digital archive bringing India's timeless monuments, living legends, and architectural treasures to the world.
+      </p>
+      <p style="font-size: 0.82rem; color: #d4af37;">
+        Powered by Google Gemini AI · Multilingual · 3D Coverflow
+      </p>
+    </div>
+
+    <div class="footer-links-col">
+      <h3 style="font-family: 'Cinzel', serif; font-size: 0.95rem; color: #d4af37; margin-bottom: 0.75rem; letter-spacing: 1px;">Expedition Hub</h3>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem;">
+        <li><a href="#eighty-days-section">🗺️ 80-Day Odyssey</a></li>
+        <li><a href="#discover">🎯 3D Curated Decks</a></li>
+        <li><a href="#state-heritage-guide">🧭 State Heritage Guides</a></li>
+        <li><a href="my-journey.html">🌿 Sacred Scrapbook Album</a></li>
+        <li><a href="#heritage-test">🏆 Heritage Challenge Quiz</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-links-col">
+      <h3 style="font-family: 'Cinzel', serif; font-size: 0.95rem; color: #ef4444; margin-bottom: 0.75rem; letter-spacing: 1px;">Safety &amp; Helplines</h3>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem;">
+        <li><a href="#rakshasetu">🛡️ RakshaSetu Safety Grid</a></li>
+        <li><a href="tel:112">🚨 112 — National ERSS</a></li>
+        <li><a href="tel:1363">🧭 1363 — Tourist Helpline</a></li>
+        <li><a href="tel:1091">🛡️ 1091 — Women Safety</a></li>
+        <li><a href="tel:108">🚑 108 — Medical Ambulance</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-links-col">
+      <h3 style="font-family: 'Cinzel', serif; font-size: 0.95rem; color: #d4af37; margin-bottom: 0.75rem; letter-spacing: 1px;">Legal &amp; Team</h3>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem;">
+        <li><a href="legal.html#privacy">🛡️ Privacy Policy</a></li>
+        <li><a href="legal.html#terms">📜 Terms &amp; Conditions</a></li>
+        <li><a href="legal.html#cookies">🍪 Cookie Policy</a></li>
+        <li><a href="#about-creators">👥 Team CODE:BLACK</a></li>
+        <li><a href="mailto:rsgaming8090@gmail.com">✉️ rsgaming8090@gmail.com</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom-bar">
+    <p>&copy; <span id="footer-year">2026</span> BharatVirasat — Celebrating Indian Heritage Through Technology 🇮🇳</p>
+    <p style="font-size: 0.8rem; color: #64748b;">Created with passion during Smart India Hackathon</p>
+  </div>
 </footer>
 
 <aside id="consent-banner" class="consent-banner" aria-label="Privacy choices" hidden>
@@ -285,7 +575,10 @@
       <h2>Heritage Site Details</h2>
       <button class="modal-close" aria-label="Close modal">&times;</button>
     </div>
-    <div id="modal-body-placeholder">Loading...</div>
+    <div id="modal-body-placeholder" class="detail-modal-loader">
+      <div class="spinner-monument">🏛️</div>
+      <p>Summoning architectural archives...</p>
+    </div>
   </div>
 </div>
 
@@ -311,18 +604,18 @@
       <form id="auth-form" class="auth-form" autocomplete="on">
         <div id="signup-name-group" class="form-group" style="display: none;">
           <label for="auth-name">Full Name</label>
-          <input type="text" id="auth-name" placeholder="John Doe" autocomplete="name">
+          <input type="text" id="auth-name" placeholder="Vikramaditya Sharma" autocomplete="name">
         </div>
 
         <div class="form-group">
           <label for="auth-email">Email</label>
-          <input type="email" id="auth-email" placeholder="m@example.com" required autocomplete="email">
+          <input type="email" id="auth-email" placeholder="explorer@bharatvirasat.in" required autocomplete="email">
         </div>
 
         <div class="form-group">
           <label for="auth-password">Password</label>
           <div class="password-wrapper">
-            <input type="password" id="auth-password" placeholder="••••••••" required autocomplete="current-password">
+            <input type="password" id="auth-password" placeholder="Enter your password" required autocomplete="current-password">
             <button type="button" id="toggle-pwd-btn" class="pwd-toggle-btn" aria-label="Toggle password visibility">👁️</button>
           </div>
         </div>
@@ -392,11 +685,18 @@
 
 <!-- SCRIPTS IN STRICT SEQUENCE -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="data.js"></script>
 <script src="app-firebase.js"></script>
 <script src="app-premium.js"></script>
 <script src="gemini-bot.js"></script>
 <script src="state-guides.js"></script>
+<script src="rakshasetu.js"></script>
+<script src="welcome-gateway.js"></script>
+<script src="eighty-days-planner.js?v=20261008_80days"></script>
+<script src="drishti-scanner.js"></script>
+<script src="asi-portal.js"></script>
+<script src="dadi-storyteller.js"></script>
 
 <script>
 // Ambient Background Gold Dust Canvas (Subtle, lightweight, 60fps)
@@ -465,7 +765,9 @@ function loadGoogleTranslate() {
 const consentKey = 'bharat-consent-v1';
 const consentBanner = document.getElementById('consent-banner');
 const savedConsent = localStorage.getItem(consentKey);
-if (savedConsent === 'optional') loadGoogleTranslate();
+if (savedConsent !== 'essential') {
+  loadGoogleTranslate();
+}
 if (!savedConsent && consentBanner) consentBanner.hidden = false;
 document.getElementById('accept-optional-cookies')?.addEventListener('click', () => {
   localStorage.setItem(consentKey, 'optional');
@@ -588,7 +890,7 @@ if ('IntersectionObserver' in window) {
 }
 
 const chapterLinks = document.querySelectorAll('.chapter-nav a');
-const chapterSections = document.querySelectorAll('#journey, #discover, #state-heritage-guide, #heritage-test, #about-creators');
+const chapterSections = document.querySelectorAll('#journey, #eighty-days-section, #discover, #state-heritage-guide, #rakshasetu, #heritage-test, #about-creators');
 if ('IntersectionObserver' in window) {
   const chapterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -599,6 +901,69 @@ if ('IntersectionObserver' in window) {
   chapterSections.forEach(section => chapterObserver.observe(section));
 }
 
+// Mobile Menu Controller
+function openMobileMenu() {
+  document.getElementById('mobile-nav-drawer')?.classList.add('active');
+  document.getElementById('mobile-nav-backdrop')?.classList.add('active');
+  document.getElementById('mobile-menu-toggle')?.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-nav-drawer')?.classList.remove('active');
+  document.getElementById('mobile-nav-backdrop')?.classList.remove('active');
+  document.getElementById('mobile-menu-toggle')?.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+window.openMobileMenu = openMobileMenu;
+window.closeMobileMenu = closeMobileMenu;
+
+document.getElementById('mobile-menu-toggle')?.addEventListener('click', () => {
+  const isOpen = document.getElementById('mobile-nav-drawer')?.classList.contains('active');
+  if (isOpen) closeMobileMenu(); else openMobileMenu();
+});
+document.getElementById('mobile-nav-close')?.addEventListener('click', closeMobileMenu);
+document.getElementById('mobile-nav-backdrop')?.addEventListener('click', closeMobileMenu);
+document.getElementById('mobile-auth-btn')?.addEventListener('click', () => {
+  closeMobileMenu();
+  typeof openAuthModal === 'function' && openAuthModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMobileMenu();
+});
+
+// Sync auth state into mobile drawer
+if (typeof auth !== 'undefined') {
+  auth.onAuthStateChanged((user) => {
+    const mobileUserInfo = document.getElementById('mobile-user-info');
+    const mobileUserEmail = document.getElementById('mobile-user-email');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+    if (user) {
+      if (mobileUserInfo) mobileUserInfo.style.display = 'block';
+      if (mobileUserEmail) mobileUserEmail.textContent = user.displayName || user.email;
+      if (mobileAuthBtn) {
+        mobileAuthBtn.textContent = '🚪 Sign Out';
+        mobileAuthBtn.onclick = () => {
+          auth.signOut();
+          closeMobileMenu();
+        };
+      }
+    } else {
+      if (mobileUserInfo) mobileUserInfo.style.display = 'none';
+      if (mobileAuthBtn) {
+        mobileAuthBtn.textContent = '🔑 Sign In / Sign Up';
+        mobileAuthBtn.onclick = () => {
+          closeMobileMenu();
+          typeof openAuthModal === 'function' && openAuthModal();
+        };
+      }
+    }
+  });
+}
+
+// Dynamic Footer Year
+const yrEl = document.getElementById('footer-year');
+if (yrEl) yrEl.textContent = new Date().getFullYear();
+
 // Close modal on outside click
 document.getElementById('detail-modal')?.addEventListener('click', (e) => {
   if (e.target === e.currentTarget) {
@@ -606,6 +971,41 @@ document.getElementById('detail-modal')?.addEventListener('click', (e) => {
   }
 });
 </script>
+
+<!-- RAKSHASETU VISUAL SIREN STROBE OVERLAY -->
+<div id="raksha-visual-strobe"></div>
+
+<!-- RAKSHASETU TACTICAL FAKE CALL MODAL -->
+<div id="raksha-fakecall-modal" class="raksha-fakecall-overlay" role="dialog" aria-modal="true" aria-label="Incoming Simulated Emergency Call">
+  <!-- Incoming Call Screen -->
+  <div id="raksha-fakecall-incoming" class="raksha-fakecall-screen">
+    <div class="raksha-fakecall-avatar">👤</div>
+    <div class="raksha-fakecall-title">Emergency Contact (Dad)</div>
+    <div class="raksha-fakecall-subtitle">Incoming Call... · Mobile</div>
+
+    <div class="raksha-fakecall-buttons">
+      <button type="button" id="raksha-fakecall-decline-btn" class="raksha-call-circle-btn raksha-call-decline" aria-label="Decline Call">✕</button>
+      <button type="button" id="raksha-fakecall-accept-btn" class="raksha-call-circle-btn raksha-call-accept" aria-label="Accept Call">✓</button>
+    </div>
+  </div>
+
+  <!-- In-Call Connected Screen -->
+  <div id="raksha-fakecall-connected" class="raksha-fakecall-screen" style="display: none;">
+    <div class="raksha-fakecall-avatar" style="width: 80px; height: 80px; font-size: 40px; margin-bottom: 0.75rem;">👤</div>
+    <div class="raksha-fakecall-title">Emergency Contact (Dad)</div>
+    <div id="raksha-fakecall-timer" class="raksha-fakecall-subtitle" style="color: #22c55e; font-weight: 700; margin-bottom: 1.5rem;">00:00</div>
+
+    <div class="raksha-incall-controls">
+      <div class="raksha-incall-icon-btn" title="Mute">🔇</div>
+      <div class="raksha-incall-icon-btn" title="Keypad">⌨️</div>
+      <div class="raksha-incall-icon-btn" title="Speaker">🔊</div>
+    </div>
+
+    <button type="button" id="raksha-fakecall-hangup-btn" class="raksha-call-circle-btn raksha-call-decline" style="width: 62px; height: 62px; margin-top: 1rem;" aria-label="End Call">
+      ✕
+    </button>
+  </div>
+</div>
 
 </body>
 </html>

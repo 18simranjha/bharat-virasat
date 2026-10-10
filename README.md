@@ -110,6 +110,14 @@ Do not use `*` for `ALLOWED_ORIGIN`.
 - Google Translate language selector
 - Interactive heritage knowledge test
 - Gemini chat through a protected backend
+- **🛡️ RakshaSetu Tourist Safety & Emergency Grid:**
+  - Device location display and user-initiated Google Maps, SMS, and WhatsApp sharing links
+  - The map shows the device location only; nearby services are not plotted or verified
+  - No emergency alert is sent automatically; users must call or choose a sharing option themselves
+  - Tactical fake call interface with incoming ringtone, avatar, and in-call timer to safely defuse awkward or threatening situations
+  - High-decibel audio deterrent siren using Web Audio API sawtooth oscillator with flashing visual strobe
+  - One-touch emergency dialing for 112 (National ERSS), 1363 (Incredible India Tourist Helpline), 1091 (Women Safety), and 108 (Ambulance)
+  - Direct call links for listed helplines and location sharing links
 
 ## Image Naming
 

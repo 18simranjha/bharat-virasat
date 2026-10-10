@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Vintage Heritage Scrapbook - Bharat Virasat</title>
+  <title>Sacred Heritage Scrapbook - BharatVirasat</title>
+  <meta name="description" content="Your private vintage scrapbook documenting heritage journeys, field memoirs, and cultural expeditions across India.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +22,10 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html {
+      overflow-x: hidden;
+    }
+
     body {
       background: var(--desk-wood);
       background-image: 
@@ -30,6 +36,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      width: 100%;
     }
 
     /* TOP BAR */
@@ -148,8 +155,9 @@
     }
 
     .closed-book-card {
-      width: 380px;
-      height: 530px;
+      width: min(380px, calc(100vw - 32px));
+      max-width: 100%;
+      height: min(530px, 80vh);
       background: 
         radial-gradient(circle at 60% 40%, rgba(139, 90, 43, 0.25) 0%, transparent 60%),
         linear-gradient(135deg, #d8c29d 0%, #caa778 45%, #b28652 100%);
@@ -927,17 +935,63 @@
     document.getElementById("close-inspect-btn").addEventListener("click", closeInspect);
     inspectBackdrop.addEventListener("click", closeInspect);
 
-    // AUTH GUARD
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        currentUserId = user.uid;
-        document.getElementById("journey-user-email").textContent = user.displayName || user.email.split("@")[0];
-        loadAlbumMemories(user.uid);
-      } else {
-        alert("Please sign in first to access your private heritage album.");
-        window.location.href = "index.html";
+    // DEFAULT MEMORIES FOR GUEST / PREVIEW MODE
+    const DEFAULT_MEMORIES = [
+      {
+        id: "default_1",
+        siteName: "Taj Mahal",
+        state: "Uttar Pradesh",
+        visitDate: "2026-03-12",
+        notes: "Watched the ivory marble transition from dusty gold sunrise to pristine lunar white at dusk. A timeless monument to enduring devotion.",
+        imageBase64: "images/taj mahal.jpg"
+      },
+      {
+        id: "default_2",
+        siteName: "Vittala Temple Stone Chariot",
+        state: "Karnataka",
+        visitDate: "2026-02-18",
+        notes: "Touched the musical pillars and stood before the monumental monolithic chariot in the ancient boulder hills of Vijayanagara, Hampi.",
+        imageBase64: "images/Group of Monuments at Hampi.jpg"
       }
-    });
+    ];
+
+    function getLocalMemories() {
+      try {
+        const raw = localStorage.getItem("bharat_scrapbook_guest");
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return [...DEFAULT_MEMORIES];
+    }
+
+    function saveLocalMemories(list) {
+      try {
+        localStorage.setItem("bharat_scrapbook_guest", JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    // AUTH OBSERVER & GUEST FALLBACK
+    let isGuestMode = false;
+
+    if (typeof auth !== 'undefined') {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          isGuestMode = false;
+          currentUserId = user.uid;
+          document.getElementById("journey-user-email").textContent = user.displayName || user.email.split("@")[0];
+          loadAlbumMemories(user.uid);
+        } else {
+          isGuestMode = true;
+          currentUserId = "guest_explorer";
+          document.getElementById("journey-user-email").textContent = "Guest Explorer (Offline)";
+          loadLocalMemories();
+        }
+      });
+    } else {
+      isGuestMode = true;
+      currentUserId = "guest_explorer";
+      document.getElementById("journey-user-email").textContent = "Guest Explorer (Offline)";
+      loadLocalMemories();
+    }
 
     // IMAGE COMPRESSION TO POLAROID
     document.getElementById("site-photo-input").addEventListener("change", function(e) {
@@ -971,7 +1025,6 @@
     // SUBMIT & PIN TO SCRAPBOOK
     document.getElementById("travel-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!currentUserId) return;
 
       const siteName = document.getElementById("site-name-input").value.trim();
       const state = document.getElementById("state-input").value.trim();
@@ -981,6 +1034,29 @@
       const submitBtn = document.getElementById("submit-btn");
       submitBtn.disabled = true;
       submitBtn.textContent = "Mounting into Scrapbook...";
+
+      if (isGuestMode || !db) {
+        const list = getLocalMemories();
+        const newDoc = {
+          id: "guest_" + Date.now(),
+          siteName: siteName,
+          state: state,
+          visitDate: visitDate,
+          notes: notes,
+          imageBase64: selectedBase64Image || null
+        };
+        list.unshift(newDoc);
+        saveLocalMemories(list);
+
+        document.getElementById("travel-form").reset();
+        selectedBase64Image = "";
+        document.getElementById("preview-box").style.display = "none";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Pin to Album Page";
+        closeAdd();
+        loadLocalMemories();
+        return;
+      }
 
       try {
         await db.collection("users").doc(currentUserId).collection("travelTree").add({
@@ -1001,63 +1077,99 @@
 
         loadAlbumMemories(currentUserId);
       } catch (err) {
-        alert("Error saving: " + err.message);
+        console.warn("Firestore save failed, saving to local guest storage:", err);
+        const list = getLocalMemories();
+        list.unshift({
+          id: "guest_" + Date.now(),
+          siteName: siteName,
+          state: state,
+          visitDate: visitDate,
+          notes: notes,
+          imageBase64: selectedBase64Image || null
+        });
+        saveLocalMemories(list);
+        document.getElementById("travel-form").reset();
+        selectedBase64Image = "";
+        document.getElementById("preview-box").style.display = "none";
         submitBtn.disabled = false;
         submitBtn.textContent = "Pin to Album Page";
+        closeAdd();
+        loadLocalMemories();
       }
     });
 
-    // LOAD & RENDER SPREAD
+    // RENDER LOCAL MEMORIES
+    function loadLocalMemories() {
+      const list = getLocalMemories();
+      renderMemoriesList(list);
+    }
+
+    // LOAD & RENDER SPREAD FROM FIRESTORE
     async function loadAlbumMemories(uid) {
       try {
         const snap = await db.collection("users").doc(uid).collection("travelTree")
           .orderBy("visitDate", "desc")
           .get();
 
-        const leftContainer = document.getElementById("left-polaroids-container");
-        const rightContainer = document.getElementById("right-polaroids-container");
-        leftContainer.innerHTML = '';
-        rightContainer.innerHTML = '';
-        loadedNodes = {};
+        if (snap.empty) {
+          // If Firestore is empty, fallback to local memories
+          loadLocalMemories();
+          return;
+        }
 
-        document.getElementById("stat-count").textContent = snap.size;
-
-        if (snap.empty) return;
-
-        let index = 0;
+        const items = [];
         snap.forEach(doc => {
           const item = doc.data();
           item.id = doc.id;
-          loadedNodes[doc.id] = item;
-
-          const rotation = (index % 3 === 0) ? '-2.5deg' : (index % 2 === 0 ? '2deg' : '-1.2deg');
-
-          const polaroid = document.createElement("div");
-          polaroid.className = "vintage-photo-mount";
-          polaroid.style.transform = `rotate(${rotation})`;
-          polaroid.onclick = () => openInspect(item.id);
-
-          polaroid.innerHTML = `
-            <div class="photo-crop-box">
-              ${item.imageBase64 
-                ? `<img src="${item.imageBase64}" alt="${escapeHtml(item.siteName)}">` 
-                : `<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem; background:#382717;">🏛️</div>`}
-            </div>
-            <div class="photo-handwritten-title">${escapeHtml(item.siteName)}</div>
-            <div class="photo-date-badge">${item.visitDate || 'Explored'} • ${escapeHtml(item.state || 'India')}</div>
-          `;
-
-          if (index % 2 === 0) {
-            leftContainer.appendChild(polaroid);
-          } else {
-            rightContainer.appendChild(polaroid);
-          }
-          index++;
+          items.push(item);
         });
+        renderMemoriesList(items);
 
       } catch (err) {
-        console.error("Error loading album:", err);
+        console.error("Error loading album from Firestore, falling back to local:", err);
+        loadLocalMemories();
       }
+    }
+
+    function renderMemoriesList(items) {
+      const leftContainer = document.getElementById("left-polaroids-container");
+      const rightContainer = document.getElementById("right-polaroids-container");
+      leftContainer.innerHTML = '';
+      rightContainer.innerHTML = '';
+      loadedNodes = {};
+
+      document.getElementById("stat-count").textContent = items.length;
+
+      if (!items || items.length === 0) return;
+
+      let index = 0;
+      items.forEach(item => {
+        loadedNodes[item.id] = item;
+
+        const rotation = (index % 3 === 0) ? '-2.5deg' : (index % 2 === 0 ? '2deg' : '-1.2deg');
+
+        const polaroid = document.createElement("div");
+        polaroid.className = "vintage-photo-mount";
+        polaroid.style.transform = `rotate(${rotation})`;
+        polaroid.onclick = () => openInspect(item.id);
+
+        polaroid.innerHTML = `
+          <div class="photo-crop-box">
+            ${item.imageBase64 
+              ? `<img src="${item.imageBase64}" alt="${escapeHtml(item.siteName)}">` 
+              : `<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem; background:#382717;">🏛️</div>`}
+          </div>
+          <div class="photo-handwritten-title">${escapeHtml(item.siteName)}</div>
+          <div class="photo-date-badge">${item.visitDate || 'Explored'} • ${escapeHtml(item.state || 'India')}</div>
+        `;
+
+        if (index % 2 === 0) {
+          leftContainer.appendChild(polaroid);
+        } else {
+          rightContainer.appendChild(polaroid);
+        }
+        index++;
+      });
     }
 
     // INSPECT (FLIP PHOTO & READ DIARY)
@@ -1113,19 +1225,29 @@
 
       setTimeout(async () => {
         try {
-          await db.collection("users").doc(currentUserId).collection("travelTree").doc(activeInspectDocId).delete();
+          if (isGuestMode || activeInspectDocId.startsWith("default_") || activeInspectDocId.startsWith("guest_") || !db) {
+            const list = getLocalMemories().filter(m => m.id !== activeInspectDocId);
+            saveLocalMemories(list);
+            loadLocalMemories();
+          } else {
+            await db.collection("users").doc(currentUserId).collection("travelTree").doc(activeInspectDocId).delete();
+            loadAlbumMemories(currentUserId);
+          }
           
           inspectDialog.classList.remove("tearing-active");
           deleteBtn.disabled = false;
           deleteBtn.textContent = "Tear Leaf from Album";
           
           closeInspect();
-          loadAlbumMemories(currentUserId);
         } catch (err) {
-          alert("Error while removing: " + err.message);
+          console.error("Error while removing leaf:", err);
+          const list = getLocalMemories().filter(m => m.id !== activeInspectDocId);
+          saveLocalMemories(list);
+          loadLocalMemories();
           inspectDialog.classList.remove("tearing-active");
           deleteBtn.disabled = false;
           deleteBtn.textContent = "Tear Leaf from Album";
+          closeInspect();
         }
       }, 620);
     });

@@ -23,6 +23,16 @@ Run:
 python server.py
 ```
 
+## Firebase Hosting (static frontend)
+
+Deploy the static site with the Firebase project selected in `.firebaserc`:
+
+```powershell
+firebase deploy --only hosting --project bharat-roots-app
+```
+
+Firebase Hosting serves the frontend only. The Python backend and `api/` functions are excluded from this deployment and must be deployed separately. Gemini chat and image scanning need a backend URL configured through `window.BHARAT_API_BASE`; do not put the Gemini key in frontend code.
+
 ## Public deployment
 
 1. Deploy the static frontend folder and `images/` to Netlify, GitHub Pages, or the old CODE:BLACK frontend project.

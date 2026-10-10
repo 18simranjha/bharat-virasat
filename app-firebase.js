@@ -149,11 +149,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const pass = document.getElementById("auth-password").value.trim();
     const name = document.getElementById("auth-name")?.value.trim();
 
-    if (!email || !pass) return alert("Email aur Password dono bhariye.");
+    if (!email || !pass) {
+      if (typeof window.showToast === 'function') {
+        window.showToast("Please enter both Email and Password.", "error");
+      } else {
+        alert("Please enter both Email and Password.");
+      }
+      return;
+    }
 
     try {
       if (isSignInMode) {
         await auth.signInWithEmailAndPassword(email, pass);
+        if (typeof window.showToast === 'function') {
+          window.showToast("✨ Welcome back! Signed in successfully.", "success");
+        }
       } else {
         const cred = await auth.createUserWithEmailAndPassword(email, pass);
         if (name && cred.user) {
@@ -164,9 +174,17 @@ document.addEventListener("DOMContentLoaded", () => {
           email: email,
           joinedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
+        if (typeof window.showToast === 'function') {
+          window.showToast("🎉 Account created! Welcome to Bharat Virasat.", "success");
+        }
       }
     } catch (err) {
-      alert("Auth Error: " + err.message);
+      console.error("Auth Error:", err);
+      if (typeof window.showToast === 'function') {
+        window.showToast(err.message || "Authentication failed", "error");
+      } else {
+        alert("Auth Error: " + err.message);
+      }
     }
   });
 
@@ -181,14 +199,26 @@ document.addEventListener("DOMContentLoaded", () => {
           email: res.user.email,
           lastLogin: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
+        if (typeof window.showToast === 'function') {
+          window.showToast(`✨ Welcome ${res.user.displayName || 'Explorer'}! Signed in with Google.`, "success");
+        }
       }
     } catch (err) {
-      alert("Google Sign-In Error: " + err.message);
+      console.error("Google Auth Error:", err);
+      if (typeof window.showToast === 'function') {
+        window.showToast(err.message || "Google Sign-In failed", "error");
+      } else {
+        alert("Google Sign-In Error: " + err.message);
+      }
     }
   });
 
   // Logout Trigger
   document.getElementById("logout-btn")?.addEventListener("click", () => {
-    auth.signOut();
+    auth.signOut().then(() => {
+      if (typeof window.showToast === 'function') {
+        window.showToast("👋 Signed out successfully.", "info");
+      }
+    });
   });
 });

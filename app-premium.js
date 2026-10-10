@@ -1,6 +1,39 @@
 // BharatVirasat Premium - Advanced Features & 3D Coverflow Decks
 // Optimized for seamless multi-device responsiveness and fast interaction
 
+// ===== GLOBAL TOAST NOTIFICATION STACK =====
+window.showToast = function(message, type = 'info', duration = 3500) {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container';
+    container.setAttribute('aria-live', 'polite');
+    document.body.appendChild(container);
+  }
+
+  const icons = {
+    success: '✅',
+    error: '❌',
+    info: '🏛️'
+  };
+
+  const toast = document.createElement('div');
+  toast.className = `toast-message toast-${type}`;
+  toast.innerHTML = `
+    <span style="font-size: 1.15rem;">${icons[type] || '🏛️'}</span>
+    <span>${message}</span>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(15px) scale(0.95)';
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+};
+
 class BharatVirasat {
   constructor() {
     this.heritageData = window.heritageData || [];
@@ -21,23 +54,24 @@ class BharatVirasat {
 
   // ===== DARK MODE =====
   setupDarkMode() {
-    const toggle = document.querySelector('.dark-toggle');
+    const toggles = document.querySelectorAll('.dark-toggle');
     if (this.darkMode) {
       document.body.classList.add('dark-mode');
-      if (toggle) toggle.textContent = '☀️';
+      toggles.forEach(t => t.textContent = '☀️');
     }
 
-    if (toggle) {
+    toggles.forEach(toggle => {
       toggle.addEventListener('click', () => this.toggleDarkMode());
-    }
+    });
   }
 
   toggleDarkMode() {
     this.darkMode = !this.darkMode;
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('darkMode', this.darkMode);
-    const toggle = document.querySelector('.dark-toggle');
-    if (toggle) toggle.textContent = this.darkMode ? '☀️' : '🌙';
+    const toggles = document.querySelectorAll('.dark-toggle');
+    toggles.forEach(t => t.textContent = this.darkMode ? '☀️' : '🌙');
+    window.showToast(this.darkMode ? '🌙 Dark mode enabled' : '☀️ Light mode enabled', 'info');
   }
 
   // ===== EVENT LISTENERS =====
@@ -409,6 +443,7 @@ class BharatVirasat {
           <div style="margin-top: 0.8rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
             <button class="btn btn-secondary modal-audio-btn" type="button">▶ Play Story</button>
             <button class="btn btn-secondary mood-audio-btn" type="button">✨ Ambient Mood</button>
+            <button class="btn btn-secondary modal-dadi-btn" type="button" style="border-color: #d4af37; color: #d4af37;">👵 Dadi Maa's Tale</button>
           </div>
         </div>
 
@@ -416,7 +451,10 @@ class BharatVirasat {
         <p style="line-height: 1.6; margin-bottom: 1.25rem;">${description}</p>
 
         <div class="ticket-panel">
-          <strong>🎟️ Ticketing & Access</strong>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 6px;">
+            <strong>🎟️ Ticketing & Access</strong>
+            <button type="button" class="btn btn-secondary btn-sm modal-asi-btn" style="font-size: 0.75rem; padding: 3px 8px; border-color: #d4af37; color: #d4af37;">🛡️ View ASI Dossier</button>
+          </div>
           <p style="margin-top: 0.35rem;">${site.ticketPrice || 'Verify current entry tariffs on the Archaeological Survey of India (ASI) or state portal.'}</p>
         </div>
 
@@ -447,6 +485,18 @@ class BharatVirasat {
       const audioText = site.audioNarration || `${site.name}. ${description}`;
       if (typeof window.playHeritageAudio === 'function') {
         window.playHeritageAudio({ ...site, audioNarration: audioText }, modal.querySelector('.audio-style-select')?.value, voiceSelect?.value);
+      }
+    });
+
+    modal.querySelector('.modal-dadi-btn')?.addEventListener('click', () => {
+      if (typeof window.playDadiMaaStory === 'function') {
+        window.playDadiMaaStory(site.name, description);
+      }
+    });
+
+    modal.querySelector('.modal-asi-btn')?.addEventListener('click', () => {
+      if (typeof window.openASIDossier === 'function') {
+        window.openASIDossier(site);
       }
     });
 

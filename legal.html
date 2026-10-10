@@ -2,67 +2,292 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Legal | BharatVirasat</title>
-  <link rel="stylesheet" href="heritage-theme.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Legal &amp; Privacy Policy - BharatVirasat</title>
+  <meta name="description" content="Official terms and conditions, privacy protections, and cookie usage guidelines for BharatVirasat.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    main { max-width: 900px; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
-    header { padding: 1.25rem; color: #fffaf2; }
-    header a { color: #fffaf2; font-weight: 700; text-decoration: none; }
-    nav { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0 2rem; }
-    nav a { color: #183d3a; font-weight: 700; }
-    section { background: rgba(255, 250, 242, 0.82); border-top: 3px solid #b56b35; padding: 1.5rem; margin: 1.25rem 0; }
-    h1 { color: #183d3a; } h2 { color: #183d3a; margin-top: 0; }
-    li { margin: .5rem 0; line-height: 1.55; }
-    p { line-height: 1.65; }
-    .notice { border-left: 4px solid #1f6f68; padding-left: 1rem; }
+    :root {
+      --gold: #d4af37;
+      --gold-light: #fef08a;
+      --gold-dark: #8f5b1d;
+      --bg: #080d1a;
+      --card-bg: rgba(16, 23, 40, 0.9);
+      --text: #f4efe6;
+      --text-muted: #cbd5e1;
+      --border: rgba(212, 175, 55, 0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: rgba(14, 26, 43, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo-icon { font-size: 1.8rem; }
+
+    .logo-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+    }
+
+    .logo-sub {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+
+    .back-btn {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      transition: all 0.25s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+    }
+
+    main {
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+      flex: 1;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      color: #fff;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    .legal-notice {
+      background: rgba(212, 175, 55, 0.08);
+      border-left: 4px solid var(--gold);
+      padding: 1rem 1.25rem;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin: 1.5rem 0 2rem;
+      line-height: 1.6;
+    }
+
+    .legal-nav {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .legal-nav a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .legal-nav a:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+    }
+
+    section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: 14px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    h2 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold-light);
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+    }
+
+    ul {
+      margin: 1rem 0 1.25rem 1.5rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 0.75rem;
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    li strong {
+      color: #fff;
+    }
+
+    a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background: rgba(10, 18, 30, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    footer a {
+      color: var(--gold);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0.85rem 1rem; }
+      section { padding: 1.25rem; }
+      .legal-nav a { width: 100%; text-align: center; }
+    }
   </style>
 </head>
 <body>
-  <header><a href="/">BharatVirasat</a></header>
+
+  <header>
+    <a href="index.html" class="logo" aria-label="BharatVirasat Home">
+      <span class="logo-icon">🏛️</span>
+      <div>
+        <div class="logo-title">BHARAT VIRASAT</div>
+        <div class="logo-sub">LEGAL ARCHIVE</div>
+      </div>
+    </a>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </header>
+
   <main>
-    <h1>Legal information</h1>
-    <p class="notice"><strong>Last updated:</strong> September 12, 2026. This page explains how the public demo handles information. It is not legal advice.</p>
-    <nav aria-label="Legal documents">
-      <a href="#privacy">Privacy policy</a>
-      <a href="#terms">Terms and conditions</a>
-      <a href="#cookies">Cookie policy</a>
+    <h1>Legal Information &amp; Policy</h1>
+    <div class="legal-notice">
+      <strong>Last Updated:</strong> October 2026. This comprehensive disclosure explains how BharatVirasat handles data, authenticates accounts, guarantees user safety, and respects privacy.
+    </div>
+
+    <nav class="legal-nav" aria-label="Legal document sections">
+      <a href="#privacy">🛡️ Privacy Policy</a>
+      <a href="#terms">📜 Terms &amp; Conditions</a>
+      <a href="#cookies">🍪 Cookie &amp; Storage Policy</a>
+      <a href="#emergency">🚨 Emergency &amp; Safety Disclaimer</a>
     </nav>
 
     <section id="privacy">
-      <h2>Privacy policy</h2>
-      <p>BharatVirasat is a heritage exploration website. We do not sell personal information. Advertising and analytics services may be added as the site develops, and this policy explains the related third-party technology.</p>
+      <h2>🛡️ Privacy Policy</h2>
+      <p>BharatVirasat is a digital heritage preservation platform and exploratory archive. We respect your autonomy and privacy and do not sell personal information to third parties.</p>
       <ul>
-        <li><strong>Information you provide:</strong> a name, rating, and review text when you submit a visitor review. Reviews are sent to the review API and may be publicly displayed. Do not include contact details, sensitive information, or information about another person.</li>
-        <li><strong>AI chat:</strong> your question, selected age group, and recent chat messages are sent to the configured Gemini API through our backend to generate a response. Do not submit secrets or sensitive personal information.</li>
-        <li><strong>Browser storage:</strong> preferences, dark-mode choice, locally saved fallback reviews, and consent choices may be stored in your browser using localStorage. This is not a server account.</li>
-        <li><strong>Technical data:</strong> the hosting provider may process ordinary request data such as IP address, timestamps, and error logs for security and delivery. The site does not use this data for behavioral profiling.</li>
-        <li><strong>Third parties:</strong> Google Translate loads only after optional language-service consent. Google Gemini receives chat requests when you use AI Chat. Google Maps opens only when you choose directions. Their own policies apply.</li>
-        <li><strong>Advertising and analytics:</strong> if Google AdSense or analytics services are enabled, Google and its partners may use cookies, device identifiers, or similar technologies to measure traffic, show ads, limit repeated ads, and personalize advertising where permitted. These services may process information such as approximate location, browser details, and interaction with ads.</li>
-        <li><strong>Retention:</strong> public reviews may remain until removed by the site operator. Chat history is kept in the current browser session by the interface and is sent with later chat messages; the app does not intentionally save it in a server account.</li>
+        <li><strong>Account Authentication:</strong> When you register or sign in using Firebase Authentication (Email/Password or Google Sign-In), your profile is secured with encrypted industry credentials.</li>
+        <li><strong>Private Scrapbook &amp; Journal:</strong> Field photographs, notes, and visit dates recorded in your Sacred Scrapbook are private to your authenticated user account.</li>
+        <li><strong>AI Heritage Guide &amp; Voice Interaction:</strong> Questions submitted to the Gemini AI Guide or Dadi Storyteller are processed securely via our backend to generate cultural narratives. Do not submit sensitive passwords or financial credentials.</li>
+        <li><strong>RakshaSetu Location Tools:</strong> If you grant permission, your device location is used in your browser to show your position on the map and prepare Google Maps, SMS, and WhatsApp links. Loading map tiles may reveal the approximate displayed area to the map tile provider. The site does not verify nearby facilities, send your coordinates to its backend, or automatically notify emergency services or contacts. Your location is included in an external link only if you choose that link; the destination app or service then handles it.</li>
+        <li><strong>Browser Storage:</strong> Preferences such as dark mode, favorite monuments, and cached itineraries may be stored in your browser's localStorage for instant offline access.</li>
+        <li><strong>Third-Party Integrations:</strong> Google Translate loads on demand for multi-lingual access. Interactive maps rely on OpenStreetMap and Leaflet.</li>
       </ul>
-      <p>For deletion, privacy, corrections, or collaboration questions, contact the site operator at <a href="mailto:rsgaming8090@gmail.com">rsgaming8090@gmail.com</a>.</p>
-      <p>For information about Google's partner technology, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google's partner-site policy</a>. You can manage Google ad personalization at <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google Ads Settings</a>.</p>
+      <p>For questions, data deletion requests, or privacy clarifications, email our team at <a href="mailto:rsgaming8090@gmail.com">rsgaming8090@gmail.com</a>.</p>
     </section>
 
     <section id="terms">
-      <h2>Terms and conditions</h2>
+      <h2>📜 Terms and Conditions</h2>
       <ul>
-        <li>Use this site lawfully and respectfully. Do not attempt to disrupt, overload, scrape, reverse engineer, or abuse the APIs.</li>
-        <li>Heritage facts, prices, opening times, routes, and AI answers are informational. Verify current details with official UNESCO, ASI, museum, transport, or local authority sources before travelling.</li>
-        <li>AI output can be incomplete or wrong. It is not professional travel, medical, legal, emergency, or safety advice.</li>
-        <li>You must have the right to submit review content. You grant the site permission to display it for the purpose of operating the review feature. Do not impersonate others, post unlawful content, or include personal data.</li>
-        <li>We may remove reviews, limit access, or change features to protect visitors and the service. The site is provided on an “as available” basis to the extent permitted by law.</li>
+        <li><strong>Informational Purpose:</strong> Monument schedules, ASI entry fees, SAARC slabs, and travel routes are informational. Always cross-check current regulations with official ASI offices or local administrative authorities before travel.</li>
+        <li><strong>Cultural Respect:</strong> All cultural stories, folk narratives, and architectural models celebrate the living traditions of India. Visitors are urged to practice ethical tourism, maintain quiet in sanctum sanctorum, and never deface heritage monuments.</li>
+        <li><strong>AI Output Notice:</strong> While backed by cutting-edge Gemini models, AI generated itineraries and responses are intended as cultural companions and should not be treated as absolute legal, medical, or emergency directives.</li>
+        <li><strong>Service Availability:</strong> The platform is provided as an open cultural innovation project on an "as available" basis without warranties of uninterrupted uptime.</li>
       </ul>
     </section>
 
     <section id="cookies">
-      <h2>Cookie policy</h2>
-      <p>This site may use third-party cookies for analytics and advertising services.</p>
-      <p>This demo currently uses browser localStorage for essential preferences and consent records. Google Translate is an optional third-party service and may set its own cookies after you allow the language service. If AdSense or analytics is enabled, the relevant provider may set cookies or use similar technologies under its own privacy policy and cookie controls.</p>
-      <p>Visitors in regions that require consent may be shown a Google-certified consent message before personalized advertising is served. Advertising should remain disabled until the required consent configuration and publisher disclosures are in place.</p>
-      <p>You can withdraw optional language-service consent by clearing this site's localStorage or using the browser's site-data controls, then reloading. Clearing storage also removes locally saved preferences and fallback reviews.</p>
+      <h2>🍪 Cookie &amp; Storage Policy</h2>
+      <p>BharatVirasat prioritizes privacy-first architecture. We utilize browser <code>localStorage</code> for critical client preferences:</p>
+      <ul>
+        <li><strong>Theme Preferences:</strong> Remembers your light or dark mode choice.</li>
+        <li><strong>Favorites:</strong> Preserves bookmarked monuments in your local archive.</li>
+        <li><strong>Localization:</strong> Google Translate operates client-side to dynamically render text into 28+ regional and international languages.</li>
+      </ul>
+      <p>You can reset all local storage preferences at any time by clearing your browser data or using site data settings.</p>
+    </section>
+
+    <section id="emergency">
+      <h2>🚨 Emergency &amp; Safety Disclaimer</h2>
+      <p>RakshaSetu provides location and contact shortcuts only. It is not an emergency dispatch service and does not monitor or verify local safety conditions:</p>
+      <ul>
+        <li>In life-threatening situations, dial the official National Emergency Response Support System immediately: <a href="tel:112">112 (National ERSS)</a> or <a href="tel:1363">1363 (Tourist Helpline)</a>.</li>
+        <li>This site does not send alerts to emergency services or contacts. Calls, SMS, and WhatsApp links require your action and depend on your device, network, and configured apps.</li>
+        <li>Device GPS availability and accuracy vary. Always confirm the location shown before sharing it.</li>
+      </ul>
     </section>
   </main>
+
+  <footer>
+    <p>
+      &copy; <span id="year">2026</span> BharatVirasat — Celebrating Indian Heritage Through Technology 🇮🇳 ·
+      <a href="index.html">Home</a> ·
+      <a href="mailto:rsgaming8090@gmail.com">rsgaming8090@gmail.com</a>
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

@@ -34,7 +34,8 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 85px;
-  overflow-x: clip;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -42,7 +43,8 @@ body {
   background-color: var(--bg-light);
   color: var(--text-dark);
   transition: background-color 0.4s ease, color 0.4s ease;
-  overflow-x: clip;
+  overflow-x: hidden;
+  max-width: 100%;
   position: relative;
   min-height: 100vh;
 }
@@ -1389,23 +1391,44 @@ footer p {
 }
 
 /* Mobiles & Small Screens */
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   header {
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.85rem 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
   }
 
-  .header-left,
+  .header-left {
+    width: auto;
+  }
+
   .header-controls {
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .header-controls .language-tools,
+  .header-controls #auth-header-slot,
+  .header-controls #ai-chat-btn,
+  .header-controls #saved-btn {
+    display: none !important;
+  }
+
+  .mobile-menu-toggle {
+    display: flex !important;
   }
 
   .chapter-nav {
-    top: 118px;
+    top: 62px;
     justify-content: flex-start;
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.6rem;
+    gap: 0.35rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
   }
 
   .content-shell {
@@ -1843,3 +1866,2385 @@ footer p {
   color: #d4af37;
   font-weight: 600;
 }
+
+/* ==========================================================================
+   🛡️ RAKSHASETU — TOURIST SAFETY & EMERGENCY RESPONSE GRID
+   ========================================================================== */
+
+.rakshasetu-section {
+  margin: 4.5rem 0;
+  position: relative;
+  scroll-margin-top: 100px;
+}
+
+.raksha-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.raksha-grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 960px) {
+  .raksha-grid-container {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+.raksha-card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+body:not(.dark-mode) .raksha-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(181, 107, 53, 0.25);
+  box-shadow: 0 12px 30px rgba(14, 41, 37, 0.08);
+}
+
+.raksha-card:hover {
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.raksha-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.raksha-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f8fafc;
+}
+
+body:not(.dark-mode) .raksha-card-title {
+  color: #0f172a;
+}
+
+.raksha-safety-score {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.raksha-map-legend {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-bottom: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+body:not(.dark-mode) .raksha-map-legend {
+  color: #475569;
+}
+
+.raksha-map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+#raksha-map {
+  width: 100%;
+  height: 100%;
+  background: #0f172a;
+}
+
+/* User marker ripple animation */
+.raksha-user-marker-wrap {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.raksha-user-marker-core {
+  width: 14px;
+  height: 14px;
+  background: #38bdf8;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  box-shadow: 0 0 10px #38bdf8;
+  z-index: 2;
+}
+
+.raksha-user-marker-ring {
+  width: 28px;
+  height: 28px;
+  background: rgba(56, 189, 248, 0.45);
+  border-radius: 50%;
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  animation: raksha-ripple 1.8s infinite ease-out;
+  z-index: 1;
+}
+
+@keyframes raksha-ripple {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.raksha-map-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.raksha-btn-mini {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.raksha-btn-mini:hover {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+/* SOS Trigger Card */
+.raksha-sos-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-color: rgba(239, 68, 68, 0.35);
+  background: radial-gradient(circle at 50% 20%, rgba(239, 68, 68, 0.12), rgba(15, 23, 42, 0.85));
+}
+
+.raksha-sos-button {
+  width: 100%;
+  max-width: 320px;
+  margin: 1.25rem auto;
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 1.25rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.65), 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.raksha-sos-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.85), 0 12px 25px rgba(0, 0, 0, 0.5);
+}
+
+.raksha-sos-button:active {
+  transform: scale(0.97);
+}
+
+.raksha-sos-transmitting {
+  animation: raksha-btn-pulse 1s infinite alternate;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+@keyframes raksha-btn-pulse {
+  from { opacity: 0.8; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1.02); }
+}
+
+.raksha-telemetry-badge {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  text-align: left;
+}
+
+.raksha-telemetry-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #38bdf8;
+}
+
+/* Tactical tools grid */
+.raksha-tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.raksha-tool-btn {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  color: white;
+}
+
+.raksha-fakecall-btn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+}
+
+.raksha-fakecall-btn:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  transform: translateY(-2px);
+}
+
+.raksha-siren-btn {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3);
+}
+
+.raksha-siren-btn:hover {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  transform: translateY(-2px);
+}
+
+.raksha-siren-active {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.7) !important;
+  animation: raksha-btn-pulse 0.6s infinite alternate;
+}
+
+/* Helplines Rapid Dial Grid */
+.raksha-helpline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.raksha-helpline-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+body:not(.dark-mode) .raksha-helpline-pill {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.raksha-helpline-pill:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #d4af37;
+  transform: translateY(-2px);
+}
+
+.raksha-helpline-number {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #38bdf8;
+}
+
+.raksha-helpline-label {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.2;
+}
+
+/* SOS Result & Dispatch Panel */
+.raksha-status-result-box {
+  display: none;
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid #ef4444;
+  text-align: left;
+  animation: fadeIn 0.3s ease;
+}
+
+.raksha-sos-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.raksha-alert-pill {
+  background: #ef4444;
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.raksha-time-pill {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.raksha-action-pill-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.raksha-pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.raksha-btn-maps { background: #0284c7; color: white; }
+.raksha-btn-sms { background: #16a34a; color: white; }
+.raksha-btn-wa { background: #25d366; color: white; }
+.raksha-btn-call { background: #ef4444; color: white; }
+
+.raksha-pill-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+/* Strobe Visual Effect */
+#raksha-visual-strobe {
+  display: none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+}
+
+.raksha-strobe-flashing {
+  display: block !important;
+  animation: raksha-strobe-anim 0.25s infinite;
+}
+
+@keyframes raksha-strobe-anim {
+  0% { background-color: rgba(239, 68, 68, 0.45); }
+  50% { background-color: rgba(255, 255, 255, 0.25); }
+  100% { background-color: rgba(239, 68, 68, 0.45); }
+}
+
+/* ==========================================================================
+   📞 TACTICAL FAKE CALL MODAL OVERLAY
+   ========================================================================== */
+
+.raksha-fakecall-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 15, 25, 0.96);
+  z-index: 99999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: var(--font-sans);
+}
+
+.raksha-fakecall-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.raksha-fakecall-avatar {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 3px solid rgba(212, 175, 55, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  margin-bottom: 1.25rem;
+  position: relative;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+  animation: avatarPulse 2s infinite ease-in-out;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.raksha-fakecall-title {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.raksha-fakecall-subtitle {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.5px;
+}
+
+.raksha-fakecall-buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 280px;
+}
+
+.raksha-call-circle-btn {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.raksha-call-decline {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+.raksha-call-accept {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+  animation: callAcceptPulse 1s infinite alternate;
+}
+
+@keyframes callAcceptPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.raksha-call-circle-btn:active {
+  transform: scale(0.92);
+}
+
+/* In-Call Active Screen */
+.raksha-incall-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 260px;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.raksha-incall-icon-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #cbd5e1;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   🌸 SWAGATAM ROYAL WELCOME GATEWAY
+   ========================================================================== */
+.swagatam-modal-overlay,
+.scanner-modal-overlay,
+.asi-modal-overlay,
+.dadi-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 16, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  overflow-y: auto;
+}
+
+.swagatam-modal-overlay.active,
+.scanner-modal-overlay.active,
+.asi-modal-overlay.active,
+.dadi-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.swagatam-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 10%, #1c150c 0%, #0d0905 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(212, 175, 55, 0.2);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 680px;
+  padding: 2.5rem 2rem;
+  color: #f8fafc;
+  overflow: hidden;
+  animation: swagatamEntry 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes swagatamEntry {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.swagatam-close-btn,
+.scanner-close-btn,
+.asi-close-btn,
+.dadi-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-size: 1.5rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.swagatam-close-btn:hover,
+.scanner-close-btn:hover,
+.asi-close-btn:hover,
+.dadi-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: rotate(90deg);
+}
+
+/* Auspicious Floating Petals */
+.swagatam-petal-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  font-size: 1.3rem;
+  opacity: 0.35;
+  animation: floatPetal 8s infinite ease-in-out;
+}
+
+.p1 { top: -10%; left: 15%; animation-duration: 7s; }
+.p2 { top: -10%; left: 45%; animation-duration: 9s; animation-delay: 1.5s; }
+.p3 { top: -10%; left: 75%; animation-duration: 6.5s; animation-delay: 3s; }
+.p4 { top: -10%; left: 30%; animation-duration: 11s; animation-delay: 2s; }
+.p5 { top: -10%; left: 85%; animation-duration: 8.5s; animation-delay: 0.5s; }
+
+@keyframes floatPetal {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.5; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+}
+
+.swagatam-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.swagatam-emblem {
+  font-size: 2.2rem;
+  margin-bottom: 0.35rem;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+}
+
+.swagatam-sub {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #d4af37;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.swagatam-header h2 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: #fdf6e2;
+  margin-bottom: 0.6rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.swagatam-intro {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #d1c7b7;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.swagatam-prompt {
+  text-align: center;
+  font-size: 1.05rem;
+  color: #e2d9cc;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.swagatam-archetype-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 580px) {
+  .swagatam-archetype-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.swagatam-arch-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: inherit;
+}
+
+.swagatam-arch-btn:hover {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: #d4af37;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+}
+
+.arch-icon {
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
+}
+
+.arch-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fdf6e2;
+  margin-bottom: 0.25rem;
+}
+
+.arch-desc {
+  font-size: 0.8rem;
+  color: #aaa192;
+  line-height: 1.35;
+}
+
+.swagatam-skip-note {
+  font-size: 0.8rem;
+  color: #8c8273;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* Royal Passport Unlocked */
+.royal-passport-container {
+  background: linear-gradient(135deg, rgba(32, 22, 13, 0.95) 0%, rgba(18, 12, 7, 0.98) 100%);
+  border: 2px solid #d4af37;
+  border-radius: 16px;
+  padding: 1.8rem;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.15), 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.passport-stamp-animation {
+  animation: stampImpact 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes stampImpact {
+  0% { transform: scale(1.15) rotate(-3deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.passport-seal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(212, 175, 55, 0.35);
+  margin-bottom: 1.25rem;
+}
+
+.seal-icon {
+  font-size: 1.4rem;
+}
+
+.seal-text {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #d4af37;
+}
+
+.passport-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.passport-badge-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #b56b35;
+  font-weight: 700;
+}
+
+.passport-name {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: #fdf6e2;
+}
+
+.passport-big-icon {
+  font-size: 2.5rem;
+}
+
+.passport-secret-box {
+  background: rgba(0, 0, 0, 0.35);
+  border-left: 3px solid #d4af37;
+  padding: 1rem;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1.5rem;
+}
+
+.secret-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #d4af37;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.08em;
+}
+
+.secret-text {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #e2d9cc;
+}
+
+.passport-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   🗺️ AROUND BHARAT IN 80 DAYS EXPEDITION PLANNER
+   ========================================================================== */
+.planner-section {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  padding: 4rem 1.5rem;
+  max-width: 1320px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.planner-header-box {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.planner-header-box h2 {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  color: #fdf6e2;
+  margin: 0.5rem 0 0.8rem 0;
+}
+
+.planner-tagline {
+  color: #d1c7b7;
+  font-size: 1.05rem;
+  max-width: 720px;
+  margin: 0 auto 1.8rem auto;
+  line-height: 1.6;
+}
+
+.expedition-progress-wrapper {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 14px;
+  padding: 1.25rem 1.75rem;
+  max-width: 680px;
+  margin: 0 auto 2rem auto;
+}
+
+.progress-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  color: #fdf6e2;
+  margin-bottom: 0.6rem;
+}
+
+.expedition-bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.expedition-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d4af37 0%, #e67e22 100%);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.planner-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1000px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.planner-search-box {
+  flex: 1;
+  min-width: 280px;
+}
+
+.planner-search-box input {
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  color: #fdf6e2;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.planner-search-box input:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+}
+
+.planner-action-btns {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.circuits-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.circuit-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.circuit-pill:hover,
+.circuit-pill.active {
+  background: rgba(212, 175, 55, 0.18);
+  border-color: #d4af37;
+  color: #fdf6e2;
+}
+
+.planner-map-card {
+  position: relative;
+  background: #0f141f;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  margin-bottom: 2.5rem;
+}
+
+.map-status-overlay {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1000;
+  background: rgba(15, 20, 31, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d4af37;
+}
+
+.custom-expedition-marker .marker-pin {
+  width: 28px;
+  height: 28px;
+  background: #d4af37;
+  border: 2px solid #111827;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.custom-expedition-marker .pin-day {
+  transform: rotate(45deg);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.map-popup-card {
+  padding: 0.5rem 0.25rem;
+  color: #111827;
+}
+
+.popup-badge {
+  display: inline-block;
+  background: #d4af37;
+  color: #111827;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.map-popup-card h4 {
+  font-size: 0.98rem;
+  margin-bottom: 4px;
+}
+
+.popup-loc, .popup-mono, .popup-food {
+  font-size: 0.8rem;
+  margin: 3px 0;
+}
+
+.popup-jump-btn {
+  background: #111827;
+  color: #fdf6e2;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Daily Cards Grid */
+.daily-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .daily-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.daily-card {
+  background: radial-gradient(circle at 10% 10%, #151a24 0%, #0d1017 100%);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+}
+
+.daily-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.card-top-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 0.85rem;
+}
+
+.day-number-badge {
+  background: #d4af37;
+  color: #111827;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.circuit-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookmark-day-btn {
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #d4af37;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bookmark-day-btn.active {
+  background: #d4af37;
+  color: #111827;
+}
+
+.day-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.22rem;
+  color: #fdf6e2;
+  margin-bottom: 0.4rem;
+  line-height: 1.35;
+}
+
+.day-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #aaa192;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.day-card-monuments {
+  font-size: 0.86rem;
+  color: #e2d9cc;
+  line-height: 1.45;
+  margin-bottom: 0.9rem;
+}
+
+.day-timeline {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 0.85rem;
+  margin-bottom: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.time-item {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #cbd5e1;
+}
+
+.time-slot {
+  font-weight: 700;
+  color: #d4af37;
+  margin-right: 4px;
+}
+
+.day-extras-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.extra-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.day-asi-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.day-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+/* ==========================================================================
+   📷 DRISHTI AI HERITAGE SITE SCANNER
+   ========================================================================== */
+.scanner-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 10%, #151b26 0%, #0a0d14 100%);
+  border: 1px solid rgba(230, 126, 34, 0.4);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(230, 126, 34, 0.2);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 650px;
+  padding: 2.2rem;
+  color: #f8fafc;
+  animation: swagatamEntry 0.35s ease;
+}
+
+.scanner-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.scanner-badge {
+  display: inline-block;
+  background: rgba(230, 126, 34, 0.2);
+  border: 1px solid #e67e22;
+  color: #e67e22;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+}
+
+.scanner-header h2 {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  color: #fdf6e2;
+  margin-bottom: 0.4rem;
+}
+
+.scanner-sub {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.scanner-dropzone-wrapper {
+  background: rgba(0, 0, 0, 0.45);
+  border: 2px dashed rgba(230, 126, 34, 0.4);
+  border-radius: 16px;
+  min-height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.scanner-dropzone-wrapper.drag-active {
+  border-color: #e67e22;
+  background: rgba(230, 126, 34, 0.08);
+}
+
+.dropzone-idle {
+  text-align: center;
+}
+
+.dropzone-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.dropzone-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+
+.dropzone-text strong {
+  font-size: 1.05rem;
+  color: #fdf6e2;
+}
+
+.dropzone-text span {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.dropzone-btns {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.scanner-preview-box,
+.scanner-camera-box {
+  width: 100%;
+  max-height: 320px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.scanner-preview-box img,
+.scanner-camera-box video {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.scanner-laser-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #e67e22 50%, transparent 100%);
+  box-shadow: 0 0 14px #e67e22, 0 0 24px #e67e22;
+  animation: laserScan 2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes laserScan {
+  0% { top: 5%; }
+  50% { top: 92%; }
+  100% { top: 5%; }
+}
+
+.camera-snap-btn {
+  position: absolute;
+  bottom: 12px;
+  z-index: 10;
+}
+
+.scanner-status-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  color: #e67e22;
+}
+
+.scanner-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(230, 126, 34, 0.3);
+  border-top-color: #e67e22;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Dossier Card Results */
+.scanner-results-panel {
+  margin-top: 1.5rem;
+  animation: swagatamEntry 0.3s ease;
+}
+
+.dossier-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 14px;
+  padding: 1.4rem;
+}
+
+.dossier-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.dossier-dynasty-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #e67e22;
+  letter-spacing: 0.08em;
+}
+
+.dossier-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: #fdf6e2;
+  margin: 2px 0;
+}
+
+.dossier-hindi {
+  font-size: 0.95rem;
+  color: #d4af37;
+}
+
+.dossier-asi-seal {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #d4af37;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dossier-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 500px) {
+  .dossier-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.meta-item {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.meta-item .label {
+  font-weight: 700;
+  color: #aaa192;
+  margin-right: 4px;
+}
+
+.dossier-summary-box {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #e2d9cc;
+  margin-bottom: 1rem;
+}
+
+.dossier-secrets-box {
+  background: rgba(212, 175, 55, 0.08);
+  border-left: 3px solid #d4af37;
+  padding: 0.85rem;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1.25rem;
+}
+
+.secrets-head {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.06em;
+}
+
+.dossier-secrets-box ul {
+  padding-left: 1.25rem;
+  font-size: 0.82rem;
+  color: #f1ede4;
+  line-height: 1.45;
+}
+
+.dossier-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ==========================================================================
+   🏛️ ARCHAEOLOGICAL SURVEY OF INDIA (ASI) OFFICIAL DOSSIER
+   ========================================================================== */
+.asi-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 10%, #16181f 0%, #0d0f14 100%);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 720px;
+  padding: 2.5rem 2rem;
+  color: #f8fafc;
+  animation: swagatamEntry 0.35s ease;
+}
+
+.asi-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  padding-bottom: 1.25rem;
+}
+
+.asi-emblem-seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #d4af37;
+  margin-bottom: 0.4rem;
+}
+
+.asi-badge-tag {
+  display: inline-block;
+  background: rgba(212, 175, 55, 0.2);
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 2px 10px;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+}
+
+.asi-header h2 {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  color: #fdf6e2;
+}
+
+.asi-gazette {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+}
+
+.asi-grid-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 520px) {
+  .asi-grid-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.asi-info-block {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.85rem;
+}
+
+.block-label {
+  font-size: 0.75rem;
+  color: #aaa192;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.block-val {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fdf6e2;
+}
+
+.asi-ticket-table-wrapper {
+  margin-bottom: 1.25rem;
+}
+
+.table-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #d4af37;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.asi-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.asi-table th,
+.asi-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.asi-table th {
+  background: rgba(212, 175, 55, 0.12);
+  color: #fdf6e2;
+  font-weight: 700;
+}
+
+.asi-table td {
+  background: rgba(0, 0, 0, 0.2);
+  color: #cbd5e1;
+}
+
+.asi-regulations-box {
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid #ef4444;
+  padding: 0.9rem;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1.25rem;
+}
+
+.reg-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #ef4444;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.06em;
+}
+
+.asi-regulations-box ul {
+  padding-left: 1.2rem;
+  font-size: 0.8rem;
+  color: #f1ede4;
+  line-height: 1.45;
+}
+
+.asi-conservation-box {
+  background: rgba(34, 197, 94, 0.08);
+  border-left: 3px solid #22c55e;
+  padding: 0.9rem;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1.5rem;
+}
+
+.con-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #22c55e;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.asi-conservation-box p {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.asi-actions-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   👵 DADI MAA KI KAHANIYAAN (GRANDMOTHER AUDIO STORYTELLER)
+   ========================================================================== */
+.dadi-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 10%, #1e150d 0%, #0d0a07 100%);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+  padding: 2.2rem;
+  color: #f8fafc;
+  animation: swagatamEntry 0.35s ease;
+}
+
+.dadi-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.dadi-avatar-box {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.05) 70%);
+  border: 2px solid #d4af37;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dadi-avatar-emoji {
+  font-size: 2.4rem;
+}
+
+.dadi-soundwaves {
+  position: absolute;
+  bottom: -6px;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 14px;
+}
+
+.dadi-soundwaves span {
+  width: 3px;
+  height: 4px;
+  background: #d4af37;
+  border-radius: 999px;
+  transition: height 0.2s;
+}
+
+.dadi-soundwaves.active span:nth-child(1) { animation: soundWave 0.6s infinite ease-in-out; }
+.dadi-soundwaves.active span:nth-child(2) { animation: soundWave 0.8s infinite ease-in-out 0.1s; }
+.dadi-soundwaves.active span:nth-child(3) { animation: soundWave 0.5s infinite ease-in-out 0.2s; }
+.dadi-soundwaves.active span:nth-child(4) { animation: soundWave 0.7s infinite ease-in-out 0.15s; }
+.dadi-soundwaves.active span:nth-child(5) { animation: soundWave 0.6s infinite ease-in-out 0.25s; }
+
+@keyframes soundWave {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+
+.dadi-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #d4af37;
+  text-transform: uppercase;
+}
+
+.dadi-header h2 {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: #fdf6e2;
+}
+
+.dadi-sub {
+  font-size: 0.85rem;
+  color: #aaa192;
+}
+
+.dadi-story-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.dadi-tab-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: #cbd5e1;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.dadi-tab-btn:hover,
+.dadi-tab-btn.active {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: #d4af37;
+  color: #fdf6e2;
+}
+
+.tab-title {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.tab-monu {
+  font-size: 0.7rem;
+  color: #aaa192;
+}
+
+/* Player Deck */
+.dadi-player-box {
+  display: flex;
+  gap: 1.5rem;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .dadi-player-box {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.gramophone-disc-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  background: #111;
+  border-radius: 50%;
+  border: 4px solid #222;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.9);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gramophone-disc-wrapper.spinning {
+  animation: spinVinyl 3.5s linear infinite;
+}
+
+@keyframes spinVinyl {
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-groove {
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.vinyl-center-label {
+  width: 48px;
+  height: 48px;
+  background: radial-gradient(circle, #d4af37 0%, #8f5b1d 100%);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: #111;
+  text-align: center;
+}
+
+.gramophone-needle {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 30px;
+  height: 50px;
+  border-right: 3px solid #d4af37;
+  border-top: 3px solid #d4af37;
+  transform-origin: top right;
+  transform: rotate(-25deg);
+  transition: transform 0.4s ease;
+}
+
+.gramophone-needle.engaged {
+  transform: rotate(5deg);
+}
+
+.dadi-story-display {
+  flex: 1;
+}
+
+.story-monument-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.story-active-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: #fdf6e2;
+  margin: 2px 0 0.5rem 0;
+}
+
+.story-hindi-callout {
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #e2d9cc;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.dadi-transcript-box {
+  max-height: 95px;
+  overflow-y: auto;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.dadi-controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.dadi-rate-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.dadi-rate-selector select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #fdf6e2;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+}
+
+/* Custom Voice File Upload */
+.dadi-custom-voice-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.custom-voice-header h4 {
+  font-size: 0.92rem;
+  color: #fdf6e2;
+  margin-bottom: 2px;
+}
+
+.custom-voice-header p {
+  font-size: 0.78rem;
+  color: #aaa192;
+  margin-bottom: 0.6rem;
+}
+
+.custom-voice-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.custom-audio-label {
+  font-size: 0.8rem;
+  color: #d4af37;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   MOBILE MENU & NAVIGATION DRAWER
+   ========================================================================== */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 8px;
+  padding: 8px 7px;
+  cursor: pointer;
+  z-index: 1001;
+  transition: all 0.25s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--primary);
+}
+
+.burger-bar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.mobile-nav-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: min(340px, 86vw);
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(14, 26, 43, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: -15px 0 45px rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+.mobile-nav-drawer.active {
+  right: 0;
+}
+
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  background: rgba(10, 20, 35, 0.6);
+}
+
+.mobile-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-serif);
+  color: #fff;
+  letter-spacing: 1.5px;
+  font-size: 1rem;
+}
+
+.mobile-nav-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.mobile-nav-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.mobile-nav-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.mobile-nav-section-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.mobile-quick-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mobile-feature-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 8px;
+  padding: 10px 10px;
+  color: #f4efe6;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.mobile-feature-chip:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--primary);
+}
+
+.mobile-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-nav-list li a {
+  display: block;
+  padding: 9px 12px;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.mobile-nav-list li a:hover {
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--primary);
+}
+
+.mobile-helplines-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mobile-helpline-pill {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.mobile-helpline-pill:hover {
+  transform: translateY(-2px);
+}
+
+.mobile-helpline-pill strong {
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.mobile-helpline-pill small {
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   GLOBAL TOAST NOTIFICATION STACK
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: min(420px, calc(100vw - 32px));
+}
+
+.toast-message {
+  pointer-events: auto;
+  background: rgba(14, 26, 43, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #f4efe6;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-message.toast-success {
+  border-color: rgba(34, 197, 94, 0.55);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(34, 197, 94, 0.25);
+}
+
+.toast-message.toast-error {
+  border-color: rgba(239, 68, 68, 0.65);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(239, 68, 68, 0.25);
+}
+
+.toast-message.toast-info {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================================================
+   SITE FOOTER STYLING
+   ========================================================================== */
+.site-footer {
+  background: rgba(8, 13, 26, 0.98);
+  border-top: 1px solid rgba(212, 175, 55, 0.25);
+  padding: 3.5rem 1.5rem 1.5rem;
+  margin-top: 4rem;
+  position: relative;
+  z-index: 5;
+}
+
+.footer-grid {
+  max-width: 1280px;
+  margin: 0 auto 2.5rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+}
+
+.footer-links-col a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.footer-links-col a:hover {
+  color: var(--primary);
+  transform: translateX(3px);
+}
+
+.footer-bottom-bar {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .footer-bottom-bar {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   MODAL LOADER BOX
+   ========================================================================== */
+.detail-modal-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  gap: 1rem;
+}
+
+.spinner-monument {
+  font-size: 3rem;
+  animation: monumentPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes monumentPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)); }
+}
+
+.detail-modal-loader p {
+  color: #d4af37;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+
