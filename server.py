@@ -1,12 +1,13 @@
 """
 BHARAT VIRASAT - Advanced Hardened Backend Server & AI Cultural Sage
-Powered by Gemini 3.8 Flash (Friendly Heritage Buddy & Drishti Vision)
+Powered by the configured Gemini API model (Friendly Heritage Buddy & Drishti Vision)
 Security Hardening: IP Rate Limiting, OWASP Security Headers, Multimodal Verification
 """
 import os
 import re
 import json
 import base64
+import binascii
 import time
 from collections import defaultdict
 from flask import Flask, request, jsonify, send_from_directory
@@ -23,12 +24,18 @@ else:
     load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", os.getenv("ALLOWED_ORIGIN", "*")).split(",")
+    if origin.strip()
+]
 
 app = Flask(__name__, static_folder=BASE_DIR)
+app.config["MAX_CONTENT_LENGTH"] = 9 * 1024 * 1024
 
 # Restrict CORS in production or allow local origin
-ALLOWED_ORIGIN = os.getenv("ALLOWED_ORIGIN", "*")
-CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGIN}})
+CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 
 # -------------------------------------------------------------
 # 🛡️ SECURITY LAYER: IN-MEMORY RATE LIMITER
@@ -95,6 +102,8 @@ DRISHTI_VISION_PROMPT = """
 You are "Drishti", the master visual heritage archaeologist of Bharat Virasat.
 Examine this photograph carefully. It depicts an Indian monument, temple, fort, stepwell, cave sculpture, or historic heritage landmark.
 
+Identify only what can reasonably be inferred from the photograph and your knowledge. Never claim this AI-generated result is verified by ASI, UNESCO, or another authority. Do not invent ticket prices, opening hours, official records, or citations; use "Check official source" when current facts cannot be verified. If the image is unclear or not a heritage site, say so in the summary instead of guessing.
+
 Identify the monument with high historical precision and return a valid JSON object matching this schema:
 {
   "monument_name": "Official Monument Name (e.g., Sun Temple, Konark)",
@@ -147,6 +156,7 @@ def ask_gemini(user_message: str, age_group: str = "adult", chat_history=None) -
                 contents.append(types.Content(role=role, parts=[types.Part.from_text(text=str(text_val)[:1000])]))
 
     sys_prompt = FRIENDLY_SYSTEM_PROMPT
+    sys_prompt += "\n\nAccuracy: Do not claim that AI output is an official ASI/UNESCO verification. Mark uncertain identification, ticket rates, timings, and access rules as needing confirmation with official sources. Do not invent citations or claim a live emergency response."
     if age_group == "child":
         sys_prompt += "\n\nNote: The user is a young child explorer! Use simpler, wonder-filled words, fairy tale vibes, and very gentle explanations."
 
@@ -157,25 +167,14 @@ def ask_gemini(user_message: str, age_group: str = "adult", chat_history=None) -
         temperature=0.7
     )
 
-    models_to_try = ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-3.5-flash']
-    last_err = None
-    for model_name in models_to_try:
-        try:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=contents,
-                config=config
-            )
-            if response and response.text:
-                return response.text.strip()
-        except Exception as err:
-            last_err = err
-            print(f"Notice: Model {model_name} failed: {err}. Trying next fallback...")
-            continue
-
-    if last_err:
-        raise last_err
-    return "Namaste explorer! Could you please repeat that question?"
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=contents,
+        config=config
+    )
+    if response and response.text:
+        return response.text.strip()
+    raise RuntimeError("Gemini returned an empty response.")
 
 # -------------------------------------------------------------
 # 💬 CHAT API (WITH RATE LIMITING & INPUT SANITIZATION)
@@ -188,13 +187,18 @@ def chat():
 
     if not client:
         return jsonify({
-            "error": "GEMINI_API_KEY is not configured on the server. Please add it to your .env file."
-        }), 500
+            "error": "Gemini is not configured. Add GEMINI_API_KEY in the backend environment."
+        }), 503
 
     try:
-        data = request.json or {}
-        user_message = data.get('message', '').strip()
+        data = request.get_json(silent=True)
+        if not isinstance(data, dict):
+            return jsonify({"error": "Send a valid JSON chat request."}), 400
+        user_message = str(data.get('message', '')).strip()
         chat_history = data.get('history', [])
+        if not isinstance(chat_history, list):
+            chat_history = []
+        chat_history = [turn for turn in chat_history if isinstance(turn, dict)]
         age_group = str(data.get('ageGroup', 'adult')).strip()
 
         if not user_message:
@@ -207,33 +211,13 @@ def chat():
         answer = ask_gemini(user_message, age_group, chat_history)
         return jsonify({"answer": answer}), 200
 
-    except Exception as e:
-        print(f"❌ Gemini Error: {str(e)}")
+    except Exception:
+        app.logger.exception("Gemini chat request failed.")
         return jsonify({"error": "AI response failed", "details": "The cultural sage could not process this request right now."}), 500
 
 import sys
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
-
-# Fallback Taj Mahal / General Heritage Dossier
-DEFAULT_FALLBACK_DOSSIER = {
-    "monument_name": "Taj Mahal",
-    "hindi_name": "ताज महल",
-    "state": "Uttar Pradesh",
-    "city": "Agra",
-    "era_dynasty": "Mughal Empire (1631–1648 CE)",
-    "architectural_style": "Indo-Islamic Mughal Architecture",
-    "unesco_status": "UNESCO World Heritage Site (1983)",
-    "asi_circle": "Agra Circle (AMASR Act Protected)",
-    "ticket_pricing": "₹50 (Indians), ₹1100 (Foreign Nationals), Free for children under 15",
-    "summary": "An ivory-white Makrana marble mausoleum commissioned by Emperor Shah Jahan for Mumtaz Mahal on the Yamuna riverbank.",
-    "architectural_secrets": [
-      "The four minarets lean outward at an angle of 3° to protect the central dome in an earthquake.",
-      "Intricate Pietra Dura inlay features 28 types of gemstones imported from Punjab, China, Tibet, and Sri Lanka."
-    ],
-    "best_time_to_visit": "October to March (Sunrise & Sunset)",
-    "matched_site_id": "taj-mahal"
-}
 
 # -------------------------------------------------------------
 # 📷 DRISHTI AI HERITAGE SITE VISUAL SCANNER
@@ -254,71 +238,70 @@ def scan_heritage():
             if uploaded_file.filename == '':
                 return jsonify({"error": "No selected file"}), 400
             mime_type = uploaded_file.mimetype or 'image/jpeg'
+            if mime_type not in {'image/jpeg', 'image/png', 'image/webp'}:
+                return jsonify({"error": "Use a JPEG, PNG, or WebP image."}), 400
             image_bytes = uploaded_file.read()
 
         # Or JSON base64 payload
         elif request.is_json:
-            data = request.json or {}
+            data = request.get_json(silent=True)
+            if not isinstance(data, dict):
+                return jsonify({"error": "Send a valid JSON image request."}), 400
             base64_str = data.get('imageBase64') or data.get('image') or ''
             if not base64_str:
                 return jsonify({"error": "No image data received"}), 400
 
-            # Strip data URL prefix if present
-            if 'base64,' in base64_str:
-                header, base64_str = base64_str.split('base64,', 1)
-                if 'image/png' in header:
-                    mime_type = 'image/png'
-                elif 'image/webp' in header:
-                    mime_type = 'image/webp'
+            if not isinstance(base64_str, str):
+                return jsonify({"error": "Image data must be a base64 string."}), 400
+            data_url_match = re.match(r'^data:(image/(?:jpeg|png|webp));base64,', base64_str)
+            if base64_str.startswith('data:'):
+                if not data_url_match:
+                    return jsonify({"error": "Use a JPEG, PNG, or WebP image."}), 400
+                mime_type = data_url_match.group(1)
+                base64_str = base64_str[data_url_match.end():]
             try:
-                image_bytes = base64.b64decode(base64_str)
-            except Exception:
-                return jsonify(DEFAULT_FALLBACK_DOSSIER), 200
+                image_bytes = base64.b64decode(base64_str, validate=True)
+            except (ValueError, binascii.Error):
+                return jsonify({"error": "Image data is not valid base64."}), 400
 
         if not image_bytes:
-            return jsonify(DEFAULT_FALLBACK_DOSSIER), 200
+            return jsonify({"error": "No image data received."}), 400
 
         # Safety: enforce max 6MB file size
         if len(image_bytes) > 6 * 1024 * 1024:
             return jsonify({"error": "Image file too large (max 6MB allowed)"}), 400
 
         if not client:
-            return jsonify(DEFAULT_FALLBACK_DOSSIER), 200
+            return jsonify({"error": "Gemini is not configured. Add GEMINI_API_KEY in the backend environment."}), 503
 
-        # Call Gemini Vision with multi-model fallback
-        try:
-            image_part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
-            models_to_try = ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-3.5-flash']
-            dossier = None
-            for model_name in models_to_try:
-                try:
-                    response = client.models.generate_content(
-                        model=model_name,
-                        contents=[image_part, DRISHTI_VISION_PROMPT],
-                        config=types.GenerateContentConfig(temperature=0.2)
-                    )
-                    raw_text = response.text.strip() if response and response.text else "{}"
-                    cleaned = re.sub(r'^```json\s*', '', raw_text)
-                    cleaned = re.sub(r'^```\s*', '', cleaned)
-                    cleaned = re.sub(r'\s*```$', '', cleaned).strip()
-                    dossier = json.loads(cleaned)
-                    if dossier and isinstance(dossier, dict):
-                        break
-                except Exception as api_err:
-                    print(f"[Notice] Drishti model {model_name} error: {api_err}. Trying fallback...")
-                    continue
+        image_part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
+        response = client.models.generate_content(
+            model=GEMINI_MODEL,
+            contents=[image_part, DRISHTI_VISION_PROMPT],
+            config=types.GenerateContentConfig(temperature=0.2)
+        )
+        raw_text = response.text.strip() if response and response.text else ""
+        cleaned = re.sub(r'^```json\s*', '', raw_text)
+        cleaned = re.sub(r'^```\s*', '', cleaned)
+        cleaned = re.sub(r'\s*```$', '', cleaned).strip()
+        dossier = json.loads(cleaned)
+        if not isinstance(dossier, dict) or not dossier.get("monument_name"):
+            raise ValueError("Gemini returned an invalid heritage dossier.")
+        return jsonify(dossier), 200
+    except (json.JSONDecodeError, ValueError):
+        app.logger.exception("Gemini returned an invalid heritage scan response.")
+        return jsonify({"error": "The image could not be identified. Try a clearer photo of the monument."}), 502
+    except Exception:
+        app.logger.exception("Gemini heritage scan failed.")
+        return jsonify({"error": "Heritage scanning is temporarily unavailable. Please try again."}), 502
 
-            if dossier:
-                return jsonify(dossier), 200
-            return jsonify(DEFAULT_FALLBACK_DOSSIER), 200
+@app.route('/api/health', methods=['GET'])
+def health():
+    return jsonify({"ok": True, "geminiConfigured": bool(client)}), 200
 
-        except Exception as scan_err:
-            print(f"[Notice] Drishti processing error: {scan_err}. Using fallback dossier.")
-            return jsonify(DEFAULT_FALLBACK_DOSSIER), 200
-
-    except Exception as e:
-        print(f"[Error] Drishti Handler Error: {e}")
-        return jsonify(DEFAULT_FALLBACK_DOSSIER), 200
+@app.errorhandler(413)
+def request_too_large(_error):
+    return jsonify({"error": "Request is too large. Images must be under 6 MB."}), 413
 
 # -------------------------------------------------------------
 # 🌐 STATIC FILE ROUTING
@@ -342,4 +325,4 @@ if __name__ == '__main__':
     print("🚀 Bharat Virasat Hardened Server running at http://127.0.0.1:8000")
     print("🛡️ Security: Rate Limiting & OWASP Headers Active")
     print("📷 Drishti AI Vision Scanner: Ready on /api/scan-heritage")
-    app.run(port=8000, debug=True)
+    app.run(port=int(os.getenv("PORT", "8000")), debug=False)

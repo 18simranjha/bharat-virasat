@@ -60,7 +60,7 @@ http://127.0.0.1:8000/premium/
 
 Never place the Gemini API key in HTML or browser JavaScript. Never commit `.env` to GitHub.
 
-Create `.env` locally or in your backend hosting dashboard:
+Create `.env` locally or add the key to Render's protected backend environment variables:
 
 ```env
 GEMINI_API_KEY=your_replacement_key
@@ -69,33 +69,17 @@ PORT=8000
 ALLOWED_ORIGIN=http://127.0.0.1:8000
 ```
 
-The old local key was removed because it had been exposed. Revoke it in Google AI Studio and create a replacement key.
-
 The `.gitignore` file protects `.env` from being committed.
 
-## Public Deployment
+## Free-Tier Backend
 
-Deploy the frontend and backend separately:
+The free Render backend is described in `render.yaml`. Connect this GitHub repository in Render using **New > Blueprint**. During setup, provide `GEMINI_API_KEY` and the Firebase site URL(s) in `ALLOWED_ORIGINS`. The browser reads only the public backend URL from `backend-config.js`; it never needs the API key.
 
-1. Deploy the premium frontend and `images/` folder to Netlify, GitHub Pages, or the existing CODE:BLACK Netlify project.
-2. Deploy `server.py` to a Python-capable service such as Render or Railway.
-3. Add `GEMINI_API_KEY`, `GEMINI_MODEL`, `PORT`, and `ALLOWED_ORIGIN` as backend environment variables.
-4. Set `ALLOWED_ORIGIN` to the exact frontend URL, for example:
+Gemini chat and image scanning both use the Google Gemini API. OpenAI keys are not compatible with this backend. The free Gemini tier has changing quotas, and its terms may allow submitted prompts and images to be used to improve Google's products. Do not send sensitive information.
 
-```text
-https://your-site.netlify.app
-```
+The 80-Day planner uses bundled itinerary data and public map tiles, so it does not need a Google Maps API key. Firebase Hosting serves the frontend only. Render's free backend may sleep when idle and is intended for testing rather than production availability.
 
-5. Before loading `gemini-bot.js`, configure the backend URL in the premium HTML:
-
-```html
-<script>
-  window.BHARAT_API_BASE = "https://your-backend-service.example";
-</script>
-<script src="gemini-bot.js"></script>
-```
-
-Do not use `*` for `ALLOWED_ORIGIN`.
+AdSense approval and revenue are not guaranteed. A paid subscription flow is not implemented; payments, premium entitlements, tax handling, and production-grade abuse controls need separate setup and review.
 
 ## Features
 

@@ -4,72 +4,47 @@
 
 The public frontend must never contain `GEMINI_API_KEY`. The key belongs only in the backend host environment variables.
 
-The previous local `.env` was removed because it contained a live key. Revoke that key in Google AI Studio and create a replacement.
+If an earlier Gemini key was exposed or committed, revoke it in Google AI Studio and create a replacement. Never copy local `.env` files into a deployment.
 
-## Local use
+## Free-tier setup: Firebase Hosting + Render + Gemini
 
-Create `.env` in the workspace root:
+Firebase Hosting serves the static site. The AI API runs as a separate Render web service described by `render.yaml`. Render's free services can sleep after inactivity, have usage limits, and are not intended for production uptime. Google AI Studio's free Gemini tier also has changing model and rate limits, and may use submitted content to improve Google's products under its current terms. This setup costs nothing on the selected free tiers but has no uptime or earnings guarantee.
 
-```env
-GEMINI_API_KEY=your_replacement_key
-GEMINI_MODEL=gemini-2.5-flash
-PORT=8000
-ALLOWED_ORIGIN=http://127.0.0.1:8000
-```
+1. Create a Gemini API key at [Google AI Studio](https://aistudio.google.com/app/apikey). This backend accepts Gemini keys only; an OpenAI key will not work.
+2. Push this repository to GitHub. In [Render](https://dashboard.render.com/), choose **New > Blueprint**, connect `18simranjha/bharat-virasat`, and select `render.yaml`.
+3. When prompted for Blueprint environment values, enter:
 
-Run:
+   - `GEMINI_API_KEY`: paste the new key directly into Render's protected environment-variable field. Do not send it in chat or put it in GitHub, JavaScript, HTML, or Firebase Hosting.
+   - `ALLOWED_ORIGINS`: `https://bharat-roots-app.web.app,https://bharat-roots-app.firebaseapp.com`
 
-```powershell
-python server.py
-```
-
-## Firebase Hosting (static frontend)
-
-Deploy the static site with the Firebase project selected in `.firebaserc`:
+4. Keep the Render **Free** plan and deploy. The blueprint uses `gemini-2.5-flash`; if Google AI Studio does not offer that model to your key, set `GEMINI_MODEL` in Render to an available Gemini model.
+5. Confirm `https://bharat-virasat-api.onrender.com/api/health` returns `{"ok":true,"geminiConfigured":true}`. If Render gives your service a different URL, update `backend-config.js` with that URL, push the change, then redeploy Firebase.
+6. Deploy the static site from the repository root:
 
 ```powershell
 firebase deploy --only hosting --project bharat-roots-app
 ```
 
-Firebase Hosting serves the frontend only. The Python backend and `api/` functions are excluded from this deployment and must be deployed separately. Gemini chat and image scanning need a backend URL configured through `window.BHARAT_API_BASE`; do not put the Gemini key in frontend code.
+7. Test chat and photo scanning at `https://bharat-roots-app.web.app`. On a sleeping free Render service, the first API request can take about a minute. Check the health URL and Render deployment logs if APIs continue to fail.
 
-## Public deployment
+The 80-Day planner uses bundled itinerary data and public map tiles. It does not require a Google Maps API key. No Gemini key belongs in Firebase Hosting settings or frontend files.
 
-1. Deploy the static frontend folder and `images/` to Netlify, GitHub Pages, or the old CODE:BLACK frontend project.
-2. Deploy the repository to a Python host such as Render or Railway.
-3. Configure the backend service start command as `python server.py`.
-4. Add these backend environment variables in the host dashboard, never in GitHub:
+## Local use
 
-```text
-GEMINI_API_KEY=your_replacement_key
-GEMINI_MODEL=gemini-2.5-flash
-PORT=8000
-ALLOWED_ORIGIN=https://your-frontend-domain.example
+Copy `.env.example` to `.env`, add a Gemini key for local testing, and run:
+
+```powershell
+pip install -r requirements.txt
+python server.py
 ```
 
-5. Before `gemini-bot.js` loads in the frontend HTML, add:
+Never commit `.env`.
 
-```html
-<script>
-  window.BHARAT_API_BASE = 'https://your-backend-domain.example';
-</script>
-<script src="gemini-bot.js"></script>
-```
+## Monetization readiness
 
-The backend now allows only that exact frontend origin. Do not use `*` for `ALLOWED_ORIGIN`.
+The project contains an AdSense client ID, but approval and revenue are controlled by Google and are not guaranteed. There is no subscription checkout or premium entitlement system yet. Before selling subscriptions, add and test a payment provider, secure server-side entitlement checks, pricing and refund policies, tax handling, and production-grade uptime/abuse controls.
 
-## Deploy to Vercel
-
-Vercel can host this frontend and the lightweight Gemini functions in `api/`. The API key must be added in Vercel, not committed to GitHub.
-
-1. Push the repository to GitHub, including `vercel.json` and the `api/` folder.
-2. Go to [Vercel](https://vercel.com), sign in with GitHub, choose **Add New Project**, and import `bharat-virasat`.
-3. Keep **Framework Preset** as `Other`, leave the build command empty, and keep the root directory as `./`.
-4. Open **Settings > Environment Variables** and add `GEMINI_API_KEY` for Production, Preview, and Development. Add `GEMINI_MODEL` with `gemini-2.5-flash`.
-5. Deploy. The root URL is rewritten to the premium page by `vercel.json`.
-6. Check `https://your-domain.vercel.app/api/health`. It should return `"ok": true` and `"geminiConfigured": true`.
-
-The current review storage uses a local JSON file and is not persistent on Vercel serverless deployments. Keep browser-local reviews for the demo or connect a hosted database before relying on shared public reviews.
+The review API's local JSON file is not persistent on Render's ephemeral filesystem or Vercel serverless instances. Do not rely on server-side shared reviews until a persistent database is configured.
 
 ## Second gallery image
 

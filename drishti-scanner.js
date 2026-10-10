@@ -57,7 +57,7 @@
         <div class="scanner-header">
           <div class="scanner-badge">📷 MULTIMODAL HERITAGE VISION</div>
           <h2 id="scanner-modal-title">Drishti AI Heritage Scanner</h2>
-          <p class="scanner-sub">Snap or upload a photo of any Indian monument, temple, or fort to uncover its history, architectural secrets, and official ASI status.</p>
+          <p class="scanner-sub">Snap or upload a photo of an Indian monument, temple, or fort for an AI-generated heritage overview. Verify ticketing, access, and protection details with official sources.</p>
         </div>
 
         <!-- UPLOAD & CAMERA ZONE -->
@@ -107,7 +107,7 @@
               </div>
               <div class="dossier-asi-seal" id="res-asi-seal">
                 <span class="seal-icon">🛡️</span>
-                <span>ASI VERIFIED</span>
+                <span>AI-ASSISTED · VERIFY DETAILS</span>
               </div>
             </div>
 
@@ -121,7 +121,7 @@
                 <span class="val" id="res-style">Indo-Islamic & Makrana Marble</span>
               </div>
               <div class="meta-item">
-                <span class="label">🎟️ ASI Ticket:</span>
+                <span class="label">🎟️ Ticket (verify officially):</span>
                 <span class="val" id="res-ticket">₹50 (Indians), ₹1100 (Foreigners)</span>
               </div>
               <div class="meta-item">
@@ -288,12 +288,16 @@
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
     displayPreview(dataUrl);
-    analyzeImagePayload(dataUrl, null);
+    analyzeImagePayload(dataUrl);
   }
 
   function processImageFile(file) {
     if (!file.type.startsWith('image/')) {
       alert('Please upload a valid image file (JPEG, PNG, WebP).');
+      return;
+    }
+    if (file.size > 6 * 1024 * 1024) {
+      alert('Please choose an image smaller than 6 MB.');
       return;
     }
 
@@ -303,7 +307,7 @@
     reader.onload = (e) => {
       const dataUrl = e.target.result;
       displayPreview(dataUrl);
-      analyzeImagePayload(dataUrl, file);
+      analyzeImagePayload(dataUrl);
     };
     reader.readAsDataURL(file);
   }
@@ -333,7 +337,7 @@
     if (statusBox) statusBox.style.display = 'none';
   }
 
-  function analyzeImagePayload(dataUrl, fileObj) {
+  function analyzeImagePayload(dataUrl) {
     const statusBox = document.getElementById('scanner-status');
     const resultsPanel = document.getElementById('scanner-results-dossier');
 
@@ -349,67 +353,28 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ imageBase64: dataUrl })
     })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-        return res.json();
+      .then(async res => {
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || `HTTP error ${res.status}`);
+        if (!result.monument_name) throw new Error('The scanner returned an invalid result. Please try another photo.');
+        return result;
       })
       .then(dossier => {
         displayDossier(dossier);
       })
       .catch(err => {
-        console.warn('Backend scanner offline or errored, using smart local heritage match:', err);
-        fallbackLocalMatch(fileObj ? fileObj.name : '');
+        console.error('Heritage scan failed:', err);
+        showScanError(err.message || 'The heritage scanner is unavailable. Please try again later.');
       });
   }
 
-  function fallbackLocalMatch(filename) {
-    const lower = (filename || '').toLowerCase();
-    let matchedSite = null;
-
-    if (typeof HERITAGE_SITES !== 'undefined' && Array.isArray(HERITAGE_SITES)) {
-      matchedSite = HERITAGE_SITES.find(s => {
-        const idMatch = s.id && lower.includes(s.id.toLowerCase());
-        const nameMatch = s.name && lower.includes(s.name.toLowerCase().split(' ')[0]);
-        return idMatch || nameMatch;
-      });
-      if (!matchedSite) matchedSite = HERITAGE_SITES[0]; // Default Taj Mahal
-    }
-
-    const fallbackDossier = matchedSite ? {
-      monument_name: matchedSite.name,
-      hindi_name: matchedSite.hindiName || matchedSite.name,
-      state: matchedSite.state || 'India',
-      city: matchedSite.location || 'Heritage Site',
-      era_dynasty: matchedSite.era || 'Historic Era',
-      architectural_style: matchedSite.architecturalStyle || 'Classical Indian Architecture',
-      unesco_status: matchedSite.unescoStatus || 'ASI Protected Monument',
-      asi_circle: 'Archaeological Survey of India Circle',
-      ticket_pricing: matchedSite.ticketPrice || '₹50 (Indians), ₹1100 (Foreigners)',
-      summary: matchedSite.shortSummary || 'Magnificent Indian heritage monument.',
-      architectural_secrets: matchedSite.fastFacts || [
-        'Built with indigenous architectural geometry and stone interlocking technique.',
-        'Registered in the national heritage gazette under the AMASR Act 1958.'
-      ],
-      best_time_to_visit: matchedSite.bestTimeToVisit || 'October to March',
-      matched_site_id: matchedSite.id
-    } : {
-      monument_name: 'Taj Mahal',
-      hindi_name: 'ताज महल',
-      state: 'Uttar Pradesh',
-      city: 'Agra',
-      era_dynasty: 'Mughal Empire (1631–1648 CE)',
-      architectural_style: 'Indo-Islamic Makrana Marble',
-      ticket_pricing: '₹50 (Indians), ₹1100 (Foreigners)',
-      summary: 'Universally admired masterpiece of ivory-white marble symmetry.',
-      architectural_secrets: [
-        'The four minarets lean outward at an angle of 3° to protect the central dome in an earthquake.',
-        'Pietra Dura inlay features 28 types of precious and semi-precious gems.'
-      ],
-      best_time_to_visit: 'Sunrise or Sunset (Closed Fridays)',
-      matched_site_id: 'taj-mahal'
-    };
-
-    displayDossier(fallbackDossier);
+  function showScanError(message) {
+    const statusBox = document.getElementById('scanner-status');
+    const statusText = document.getElementById('scanner-status-text');
+    const laser = document.getElementById('scanner-laser');
+    if (statusBox) statusBox.style.display = 'flex';
+    if (statusText) statusText.textContent = message;
+    if (laser) laser.style.display = 'none';
   }
 
   function displayDossier(dossier) {
@@ -446,7 +411,11 @@
 
     if (secretsList) {
       const secrets = dossier.architectural_secrets || [];
-      secretsList.innerHTML = secrets.map(s => `<li>${s}</li>`).join('');
+      secretsList.replaceChildren(...secrets.map(secret => {
+        const item = document.createElement('li');
+        item.textContent = secret;
+        return item;
+      }));
     }
 
     // Bind action buttons
